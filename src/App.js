@@ -1,23 +1,30 @@
-import logo from './logo.svg';
+import { useState } from 'react'
 import './App.css';
+import MovieId from './components/MovieId'
+import MovieInfo from './components/MovieInfo'
+import Serial from './components/Serial'
 
 function App() {
+  const [movieId, setMovieId] = useState(null)
+  const [movieInfo, setMovieInfo] = useState(null)
+
+  function onChangeMovieId(value) {
+    setMovieId(value);
+  }
+
+  function onChangeMovieInfo(value) {
+    setMovieInfo(value);
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <MovieId onChangeMovieId={onChangeMovieId} />
+      {movieId && (
+        <MovieInfo movieId={movieId} onChangeMovieInfo={onChangeMovieInfo} />
+      )}
+      {movieInfo && movieInfo.isSerial && (
+        <Serial serialId={movieId} />
+      )}
     </div>
   );
 }
