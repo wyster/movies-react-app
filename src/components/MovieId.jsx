@@ -18,28 +18,26 @@ function MovieId ({ onChangeMovieId }) {
   }, [onChangeMovieId]);
 
   useEffect(() => {
-    if (movieUrl) {
-      return;
-    }
     const searchParams = new URLSearchParams(window.location.search)
     const url = searchParams.get('movieUrl');
-    if (url) {
+    if (url !== movieUrl) {
       findIdByUrl(url)
       setMovieUrl(url);
     }
   }, [findIdByUrl, movieUrl])
 
-  function onChange (e) {
-    const value = e.target.value
+  function onChange (value) {
     window.history.pushState({}, document.title, `?movieUrl=${value}`);
     findIdByUrl(value)
+    setMovieUrl(value);
   }
 
   return (
     <div>
       <label>
         <p>Movie url</p>
-        <input onChange={onChange} value={movieUrl}/>
+        <input onChange={(e) => onChange(e.target.value)} value={movieUrl}/>
+        <button onClick={() => onChange('')}>Reset</button>
         {movieId && (
           <p>ID: {movieId}</p>
         )}
