@@ -1,14 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 function MovieId ({ onChangeMovieId }) {
+  const [movieUrl, setMovieUrl] = useState('');
   const [movieId, setMovieId] = useState(null)
 
-  useEffect(() => {
-    const searchParams = new URLSearchParams(window.location.search)
-    findIdByUrl(searchParams.get('movieUrl'))
-  }, [])
-
-  function findIdByUrl (value) {
+  const findIdByUrl = useCallback(value => {
     if (!value) {
       setMovieId(null)
       return
@@ -19,7 +15,19 @@ function MovieId ({ onChangeMovieId }) {
       setMovieId(data.id)
       onChangeMovieId(data.id)
     })
-  }
+  }, [onChangeMovieId]);
+
+  useEffect(() => {
+    if (movieUrl) {
+      return;
+    }
+    const searchParams = new URLSearchParams(window.location.search)
+    const url = searchParams.get('movieUrl');
+    if (url) {
+      findIdByUrl(url)
+      setMovieUrl(url);
+    }
+  }, [findIdByUrl, movieUrl])
 
   function onChange (e) {
     const value = e.target.value
@@ -31,7 +39,7 @@ function MovieId ({ onChangeMovieId }) {
     <div>
       <label>
         <p>Movie url</p>
-        <input onChange={onChange}/>
+        <input onChange={onChange} value={movieUrl}/>
         {movieId && (
           <p>ID: {movieId}</p>
         )}
