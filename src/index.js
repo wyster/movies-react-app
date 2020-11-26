@@ -4,6 +4,10 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+if (!process.env.REACT_APP_API_URL) {
+  throw new Error('process.env.REACT_APP_API_URL not defined!');
+}
+
 ReactDOM.render(
   <React.StrictMode>
     <App />
