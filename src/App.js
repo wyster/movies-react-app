@@ -10,6 +10,9 @@ function App() {
 
   function onChangeMovieId(value) {
     setMovieId(value);
+    if (value === null) {
+      setMovieInfo(null);
+    }
   }
 
   function onChangeMovieInfo(value) {

@@ -5,8 +5,12 @@ function MovieId ({ onChangeMovieId }) {
   const [movieId, setMovieId] = useState(null)
 
   const findIdByUrl = useCallback(value => {
+    if (value === movieUrl) {
+      return;
+    }
     if (!value) {
       setMovieId(null)
+      onChangeMovieId(null)
       return
     }
     fetch(`${process.env.REACT_APP_API_URL}/id-from-url?url=${value}`).then(response => {
@@ -20,14 +24,16 @@ function MovieId ({ onChangeMovieId }) {
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search)
     const url = searchParams.get('movieUrl');
-    if (url !== movieUrl) {
+    if (url) {
       findIdByUrl(url)
       setMovieUrl(url);
     }
-  }, [findIdByUrl, movieUrl])
+  }, [])
 
   function onChange (value) {
-    window.history.pushState({}, document.title, `?movieUrl=${value}`);
+    const searchParams = new URLSearchParams(window.location.search)
+    searchParams.set('movieUrl', value);
+    window.history.pushState({}, document.title, `?${searchParams.toString()}`);
     findIdByUrl(value)
     setMovieUrl(value);
   }
