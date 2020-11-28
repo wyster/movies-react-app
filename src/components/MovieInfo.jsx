@@ -5,11 +5,14 @@ function MovieInfo ({ movieId, onChangeMovieInfo }) {
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_API_URL}/details?id=${movieId}`).then(response => {
+      if (!response.ok) {
+        throw Error(response.statusText);
+      }
       return response.json()
     }).then(data => {
       setMovieInfo(data)
       onChangeMovieInfo(data);
-    })
+    }).catch(() => {})
   }, [movieId])
 
   return (
