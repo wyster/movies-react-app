@@ -73,9 +73,6 @@ function MovieId ({ onChangeMovieId }) {
             </div>
           )}
         </div>
-        {movieId && (
-          <p>ID: {movieId}</p>
-        )}
       </label>
     </div>
   )

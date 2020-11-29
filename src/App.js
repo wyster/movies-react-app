@@ -62,9 +62,6 @@ function App () {
   return (
     <div className="container-fluid mt-5 mb-5">
       <MovieId onChangeMovieId={onChangeMovieId}/>
-      {movieId && (
-        <MovieInfo movieId={movieId} onChangeMovieInfo={onChangeMovieInfo}/>
-      )}
       {movieInfo && movieInfo.isSerial && (
         <Serial
           serialId={movieId}
@@ -75,6 +72,9 @@ function App () {
           onUpdateState={onUpdateState}
           playerTime={query.time}
         />
+      )}
+      {movieId && (
+        <MovieInfo movieId={movieId} onChangeMovieInfo={onChangeMovieInfo}/>
       )}
     </div>
   )

@@ -21,6 +21,7 @@ function MovieInfo ({ movieId, onChangeMovieInfo }) {
         <p>Movie info</p>
         {movieInfo && (
           <ul>
+            <li><b>Movie ID:</b> {movieId}</li>
             {Object.entries(movieInfo).map(([label, value]) => (
               <li key={label}>
                 <b style={{marginRight: 10}}>{label}:</b>

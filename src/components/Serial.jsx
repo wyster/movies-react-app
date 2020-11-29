@@ -119,21 +119,51 @@ function Serial ({
   }
 
   function onCurrentTimeChange (time) {
-    onUpdateState({time});
+    onUpdateState({ time })
   }
 
   return (
     <>
-      <Translators serialId={serialId} translatorId={translatorId} onClickOnTranslator={onClickOnTranslator}/>
-      <Seasons seasonId={seasonId} seasons={seasons} onClickOnSeason={onClickOnSeason}/>
+      <div className="mt-1">
+        <Translators
+          serialId={serialId}
+          translatorId={translatorId}
+          onClickOnTranslator={onClickOnTranslator}
+        />
+      </div>
+      <div className="mt-1">
+        <Seasons
+          seasonId={seasonId}
+          seasons={seasons}
+          onClickOnSeason={onClickOnSeason}
+        />
+      </div>
       {seasonId && (
-        <Episodes episodeId={episodeId} episodes={getEpisodes(seasonId)} onClickOnEpisode={onClickOnEpisode}/>
+        <div className="mt-1">
+          <Episodes
+            episodeId={episodeId}
+            episodes={getEpisodes(seasonId)}
+            onClickOnEpisode={onClickOnEpisode}
+          />
+        </div>
       )}
       {videos.length > 0 && (
         <>
-          <QualityChoices quality={quality} qualities={videos} onClickOnQuality={onClickOnQuality}/>
+          <div className="mt-1">
+            <QualityChoices
+              quality={quality}
+              qualities={videos}
+              onClickOnQuality={onClickOnQuality}
+            />
+          </div>
           {quality && (
-            <Player src={getVideoSrc(quality)} currentTime={playerTime} onCurrentTimeChange={onCurrentTimeChange}/>
+            <div className="mt-1">
+              <Player
+                src={getVideoSrc(quality)}
+                currentTime={playerTime}
+                onCurrentTimeChange={onCurrentTimeChange}
+              />
+            </div>
           )}
         </>
       )}
