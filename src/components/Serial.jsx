@@ -11,7 +11,8 @@ function Serial ({
   seasonId: propSeasonId,
   translatorId: propTranslatorId,
   quality: propQuality,
-  onUpdateState
+  onUpdateState,
+  playerTime = 0
 }) {
   const [translatorId, setTranslatorId] = useState(null)
   const [episodes, setEpisodes] = useState([])
@@ -54,31 +55,31 @@ function Serial ({
   function onClickOnTranslator (translatorId) {
     setTranslatorId(translatorId)
 
-    onUpdateState({translator: translatorId});
+    onUpdateState({ translator: translatorId })
   }
 
   function onClickOnSeason (seasonId) {
     setSeasonId(seasonId)
 
-    onUpdateState({season: seasonId});
+    onUpdateState({ season: seasonId })
   }
 
   function onClickOnEpisode (episodeId) {
     setEpisodeId(episodeId)
 
-    onUpdateState({episode: episodeId});
+    onUpdateState({ episode: episodeId })
   }
 
   function onClickOnQuality (quality) {
     setQuality(quality)
 
-    onUpdateState({quality});
+    onUpdateState({ quality })
   }
 
   function getEpisodesFromServer (serialId, translatorId) {
     fetch(`${process.env.REACT_APP_API_URL}/serial/episodes?id=${serialId}&translator_id=${translatorId}`).then(response => {
       if (!response.ok) {
-        throw Error(response.statusText);
+        throw Error(response.statusText)
       }
       return response.json()
     }).then(data => {
@@ -91,7 +92,7 @@ function Serial ({
     const url = `${process.env.REACT_APP_API_URL}/serial/player?id=${serialId}&translator_id=${translatorId}&episode=${episodeId}&season=${seasonId}`
     fetch(url).then(response => {
       if (!response.ok) {
-        throw Error(response.statusText);
+        throw Error(response.statusText)
       }
       return response.json()
     }).then(data => {
@@ -117,6 +118,10 @@ function Serial ({
     return undefined
   }
 
+  function onCurrentTimeChange (time) {
+    onUpdateState({time});
+  }
+
   return (
     <>
       <Translators serialId={serialId} translatorId={translatorId} onClickOnTranslator={onClickOnTranslator}/>
@@ -128,7 +133,7 @@ function Serial ({
         <>
           <QualityChoices quality={quality} qualities={videos} onClickOnQuality={onClickOnQuality}/>
           {quality && (
-            <Player src={getVideoSrc(quality)}/>
+            <Player src={getVideoSrc(quality)} currentTime={playerTime} onCurrentTimeChange={onCurrentTimeChange}/>
           )}
         </>
       )}
