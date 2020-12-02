@@ -10,7 +10,8 @@ const querySchema = yup.object().shape({
   episode: yup.number().nullable(),
   season: yup.number().nullable(),
   quality: yup.string().nullable(),
-  time: yup.number().nullable()
+  time: yup.number().nullable(),
+  volume: yup.number().nullable()
 })
 
 function App () {
@@ -21,7 +22,8 @@ function App () {
     episode: null,
     season: null,
     quality: null,
-    time: 0
+    time: 0,
+    volume: 100
   })
 
   useEffect(() => {
@@ -71,6 +73,7 @@ function App () {
           quality={query.quality}
           onUpdateState={onUpdateState}
           playerTime={query.time}
+          playerVolume={query.volume}
         />
       )}
       {movieId && (

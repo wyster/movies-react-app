@@ -3,7 +3,9 @@ import { useEffect, useRef, useState } from 'react'
 function Player ({
   src,
   currentTime = null,
-  onCurrentTimeChange = () => {}
+  volume = null,
+  onCurrentTimeChange = () => {},
+  onChangeVolume = () => {}
 }) {
   const videoElement = useRef()
   const [timer, setTimer] = useState(null)
@@ -34,7 +36,17 @@ function Player ({
         return value;
       })
     })
+    videoElement.current.addEventListener('volumechange', e => {
+      onChangeVolume(parseInt(e.target.volume * 100, 10));
+    })
   }, [src])
+
+  useEffect(() => {
+    if (volume === null) {
+      return
+    }
+    videoElement.current.volume = volume / 100
+  }, [volume])
 
   return (
     <>

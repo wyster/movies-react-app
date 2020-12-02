@@ -12,7 +12,8 @@ function Serial ({
   translatorId: propTranslatorId,
   quality: propQuality,
   onUpdateState,
-  playerTime = 0
+  playerTime = 0,
+  playerVolume = 100
 }) {
   const [translatorId, setTranslatorId] = useState(null)
   const [episodes, setEpisodes] = useState([])
@@ -122,6 +123,10 @@ function Serial ({
     onUpdateState({ time })
   }
 
+  function onVolumeChange (volume) {
+    onUpdateState({ volume })
+  }
+
   return (
     <>
       <div className="mt-1">
@@ -161,7 +166,9 @@ function Serial ({
               <Player
                 src={getVideoSrc(quality)}
                 currentTime={playerTime}
+                volume={playerVolume}
                 onCurrentTimeChange={onCurrentTimeChange}
+                onChangeVolume={onVolumeChange}
               />
             </div>
           )}
