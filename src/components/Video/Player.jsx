@@ -5,7 +5,9 @@ function Player ({
   currentTime = null,
   volume = null,
   onCurrentTimeChange = () => {},
-  onChangeVolume = () => {}
+  onChangeVolume = () => {},
+  onEnded = () => {},
+  autoPlay = false
 }) {
   const videoElement = useRef()
   const [timer, setTimer] = useState(null)
@@ -39,6 +41,19 @@ function Player ({
     videoElement.current.addEventListener('volumechange', e => {
       onChangeVolume(parseInt(e.target.volume * 100, 10));
     })
+    videoElement.current.addEventListener('ended', e => {
+      onEnded();
+    })
+    if (autoPlay) {
+      const promise = videoElement.current.play()
+      if (promise !== undefined) {
+        promise.then(_ => {
+          // Autoplay started!
+        }).catch(e => {
+          console.error(e)
+        });
+      }
+    }
   }, [src])
 
   useEffect(() => {

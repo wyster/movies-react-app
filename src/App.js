@@ -11,7 +11,8 @@ const querySchema = yup.object().shape({
   season: yup.number().nullable(),
   quality: yup.string().nullable(),
   time: yup.number().nullable(),
-  volume: yup.number().nullable()
+  volume: yup.number().nullable(),
+  autoPlay: yup.bool().nullable()
 })
 
 function App () {
@@ -23,7 +24,8 @@ function App () {
     season: null,
     quality: null,
     time: 0,
-    volume: 100
+    volume: 100,
+    autoPlay: false
   })
 
   useEffect(() => {
@@ -31,6 +33,9 @@ function App () {
     setQuery(q => ({ ...q, ...querySchema.cast(Object.fromEntries(searchParams)) }))
 
     window.addEventListener('popstate', event => {
+      if (event.state === null) {
+        return;
+      }
       setQuery(q => ({ ...q, ...querySchema.cast(event.state) }))
     })
   }, [])
@@ -74,6 +79,7 @@ function App () {
           onUpdateState={onUpdateState}
           playerTime={query.time}
           playerVolume={query.volume}
+          playerAutoPlay={query.autoPlay}
         />
       )}
       {movieId && (

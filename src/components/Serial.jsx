@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import Translators from './Serial/Translators'
 import Seasons from './Serial/Seasons'
 import Episodes from './Serial/Episodes'
@@ -13,7 +13,8 @@ function Serial ({
   quality: propQuality,
   onUpdateState,
   playerTime = 0,
-  playerVolume = 100
+  playerVolume = 100,
+  playerAutoPlay = false
 }) {
   const [translatorId, setTranslatorId] = useState(null)
   const [episodes, setEpisodes] = useState([])
@@ -22,6 +23,7 @@ function Serial ({
   const [seasonId, setSeasonId] = useState(null)
   const [episodeId, setEpisodeId] = useState(null)
   const [quality, setQuality] = useState(null)
+  const [autoPlay, setAutoPlay] = useState(false)
 
   useEffect(() => {
     setTranslatorId(propTranslatorId)
@@ -69,6 +71,7 @@ function Serial ({
     setEpisodeId(episodeId)
 
     onUpdateState({ episode: episodeId })
+    onCurrentTimeChange(0)
   }
 
   function onClickOnQuality (quality) {
@@ -127,6 +130,17 @@ function Serial ({
     onUpdateState({ volume })
   }
 
+  const onEnded = useCallback(() => {
+    const nextEpisodeId = episodeId + 1
+    const nextEpisode = getEpisodes(seasonId).find(item => {
+      return item.episode === nextEpisodeId
+    })
+    if (nextEpisode) {
+      onClickOnEpisode(nextEpisode.episode)
+      setAutoPlay(true)
+    }
+  }, [seasonId, episodeId, episodes])
+
   return (
     <>
       <div className="mt-1">
@@ -169,6 +183,8 @@ function Serial ({
                 volume={playerVolume}
                 onCurrentTimeChange={onCurrentTimeChange}
                 onChangeVolume={onVolumeChange}
+                onEnded={onEnded}
+                autoPlay={autoPlay === true ? autoPlay : playerAutoPlay}
               />
             </div>
           )}
