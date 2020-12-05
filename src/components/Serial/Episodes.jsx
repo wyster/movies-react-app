@@ -1,4 +1,8 @@
-function Episodes({episodes, episodeId, onClickOnEpisode}) {
+function Episodes({
+  episodes = [],
+  episodeId,
+  onClickOnEpisode = () => {}
+}) {
   return (
     <>
       {episodes.length > 0 && (

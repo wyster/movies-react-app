@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, createRef, useRef } from 'react'
 import Translators from './Serial/Translators'
 import Seasons from './Serial/Seasons'
 import Episodes from './Serial/Episodes'
@@ -18,12 +18,14 @@ function Serial ({
 }) {
   const [translatorId, setTranslatorId] = useState(null)
   const [episodes, setEpisodes] = useState([])
+  const [seasonEpisodes, setSeasonEpisodes] = useState([])
   const [seasons, setSeasons] = useState([])
   const [videos, setVideos] = useState([])
   const [seasonId, setSeasonId] = useState(null)
   const [episodeId, setEpisodeId] = useState(null)
   const [quality, setQuality] = useState(null)
   const [autoPlay, setAutoPlay] = useState(false)
+  const [fullScreen, setFullScreen] = useState(false)
 
   useEffect(() => {
     setTranslatorId(propTranslatorId)
@@ -47,6 +49,12 @@ function Serial ({
     }
     getEpisodesFromServer(serialId, translatorId)
   }, [serialId, translatorId])
+
+  useEffect(() => {
+    setSeasonEpisodes(episodes.filter(item => {
+      return item.season === seasonId
+    }))
+  }, [episodes, seasonId])
 
   useEffect(() => {
     if (translatorId == null || seasonId == null || episodeId === null) {
@@ -104,12 +112,6 @@ function Serial ({
     }).catch(() => {})
   }
 
-  function getEpisodes (seasonId) {
-    return episodes.filter(value => {
-      return value.season === seasonId
-    })
-  }
-
   function getVideoSrc (quality) {
     const video = videos.find(value => {
       return value.quality === quality
@@ -132,14 +134,15 @@ function Serial ({
 
   const onEnded = useCallback(() => {
     const nextEpisodeId = episodeId + 1
-    const nextEpisode = getEpisodes(seasonId).find(item => {
+    const nextEpisode = seasonEpisodes.find(item => {
       return item.episode === nextEpisodeId
     })
     if (nextEpisode) {
       onClickOnEpisode(nextEpisode.episode)
       setAutoPlay(true)
+      //setFullScreen(true)
     }
-  }, [seasonId, episodeId, episodes])
+  }, [episodeId, seasonEpisodes])
 
   return (
     <>
@@ -161,7 +164,7 @@ function Serial ({
         <div className="mt-1">
           <Episodes
             episodeId={episodeId}
-            episodes={getEpisodes(seasonId)}
+            episodes={seasonEpisodes}
             onClickOnEpisode={onClickOnEpisode}
           />
         </div>
@@ -185,6 +188,7 @@ function Serial ({
                 onChangeVolume={onVolumeChange}
                 onEnded={onEnded}
                 autoPlay={autoPlay === true ? autoPlay : playerAutoPlay}
+                fullScreen={fullScreen}
               />
             </div>
           )}

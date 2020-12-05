@@ -7,13 +7,47 @@ function Player ({
   onCurrentTimeChange = () => {},
   onChangeVolume = () => {},
   onEnded = () => {},
-  autoPlay = false
+  autoPlay = false,
+  fullScreen = false
 }) {
   const videoElement = useRef()
   const [timer, setTimer] = useState(null)
 
+  function timeUpdate (e) {
+    const value = parseInt(e.target.currentTime, 10)
+    setTimer(current => {
+      if (value === current) {
+        return current
+      }
+
+      return value
+    })
+  }
+
+  function volumeChange (e) {
+    onChangeVolume(parseInt(e.target.volume * 100, 10))
+  }
+
+  function ended (e) {
+    onEnded(parseInt(e.target.currentTime, 10))
+  }
+
   useEffect(() => {
-    if (!videoElement.current.paused) {
+    if (!videoElement.current || !autoPlay) {
+      return
+    }
+    const promise = videoElement.current.play()
+    if (promise !== undefined) {
+      promise.then(_ => {
+        // Autoplay started!
+      }).catch(e => {
+        console.error(e)
+      })
+    }
+  }, [src])
+
+  useEffect(() => {
+    if (!videoElement.current || !videoElement.current.paused) {
       return
     }
     videoElement.current.currentTime = currentTime
@@ -21,47 +55,32 @@ function Player ({
 
   useEffect(() => {
     if (timer === null) {
-      return;
+      return
     }
 
-    onCurrentTimeChange(timer);
-  }, [timer]);
+    onCurrentTimeChange(timer)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [timer])
 
   useEffect(() => {
-    videoElement.current.addEventListener('timeupdate', () => {
-      const value = parseInt(videoElement.current.currentTime, 10)
-      setTimer(current => {
-        if (value === current) {
-          return current;
-        }
-
-        return value;
-      })
-    })
-    videoElement.current.addEventListener('volumechange', e => {
-      onChangeVolume(parseInt(e.target.volume * 100, 10));
-    })
-    videoElement.current.addEventListener('ended', e => {
-      onEnded();
-    })
-    if (autoPlay) {
-      const promise = videoElement.current.play()
-      if (promise !== undefined) {
-        promise.then(_ => {
-          // Autoplay started!
-        }).catch(e => {
-          console.error(e)
-        });
-      }
-    }
-  }, [src])
-
-  useEffect(() => {
-    if (volume === null) {
+    if (volume === null || !videoElement.current) {
       return
     }
     videoElement.current.volume = volume / 100
   }, [volume])
+
+  useEffect(() => {
+    if (fullScreen === false || !videoElement.current) {
+      return
+    }
+    videoElement.current.requestFullscreen()
+      .then(_ => {
+        // Full screen started!
+      })
+      .catch(e => {
+        console.error(e)
+      })
+  }, [src])
 
   return (
     <>
@@ -70,6 +89,9 @@ function Player ({
         controls
         key={src}
         style={{ width: '100%', height: '100%' }}
+        onEnded={ended}
+        onTimeUpdate={timeUpdate}
+        onVolumeChange={volumeChange}
       >
         <source src={src}/>
       </video>
