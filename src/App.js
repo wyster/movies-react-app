@@ -1,3 +1,4 @@
+import { ApolloProvider } from '@apollo/client';
 import './App.css'
 import Main from './views/Main'
 import Movie from './views/Movie'
@@ -5,19 +6,19 @@ import {
   BrowserRouter as Router,
   Switch,
   Route
-} from "react-router-dom";
+} from 'react-router-dom'
+import { client } from './ApolloClient'
 
 const routes = [
   {
-    path: "/",
+    path: '/',
     component: Main
   },
   {
-    path: "/movie/:id",
+    path: '/movie/:id',
     component: Movie,
   }
-];
-
+]
 
 function App () {
   return (
@@ -40,4 +41,10 @@ function App () {
   )
 }
 
-export default App
+const ApolloApp = () => (
+  <ApolloProvider client={client}>
+    <App/>
+  </ApolloProvider>
+)
+
+export default ApolloApp
