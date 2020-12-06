@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { findMovieId } from '../service/MovieService'
 
 function MovieId ({ onChangeMovieId }) {
   const [movieUrl, setMovieUrl] = useState('')
@@ -18,12 +19,7 @@ function MovieId ({ onChangeMovieId }) {
       onChangeMovieId(parseInt(value, 10))
       return
     }
-    fetch(`${process.env.REACT_APP_API_URL}/id-from-url?url=${value}`).then(response => {
-      if (!response.ok) {
-        throw Error(response.statusText);
-      }
-      return response.json()
-    }).then(data => {
+    findMovieId(value).then(data => {
       setMovieId(data.id)
       onChangeMovieId(data.id)
     }).catch(() => {})

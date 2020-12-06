@@ -1,15 +1,11 @@
 import { useEffect, useState } from 'react'
+import { getTranslators } from '../../service/MovieService'
 
 function Translators ({ serialId, translatorId, onClickOnTranslator }) {
   const [translators, setTranslators] = useState([])
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/serial?id=${serialId}`).then(response => {
-      if (!response.ok) {
-        throw Error(response.statusText);
-      }
-      return response.json()
-    }).then(data => {
+    getTranslators(serialId).then(data => {
       setTranslators(data.translators)
     }).catch(() => {})
   }, [serialId])
@@ -23,7 +19,8 @@ function Translators ({ serialId, translatorId, onClickOnTranslator }) {
               key={translator.id}
               className={`nav-link ${translatorId === translator.id ? 'active' : ''}`}
               href="#"
-              onClick={() => {
+              onClick={e => {
+                e.preventDefault();
                 onClickOnTranslator(translator.id)
               }}
             >

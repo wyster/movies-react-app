@@ -1,19 +1,18 @@
 import { useEffect, useState } from 'react'
+import { getMovieDetails } from '../service/MovieService'
 
-function MovieInfo ({ movieId, onChangeMovieInfo }) {
-  const [movieInfo, setMovieInfo] = useState(null)
+function MovieInfo ({
+  id,
+  onChangeMovieInfo = () => {}
+}) {
+  const [movieInfo, setMovieInfo] = useState([])
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/details?id=${movieId}`).then(response => {
-      if (!response.ok) {
-        throw Error(response.statusText);
-      }
-      return response.json()
-    }).then(data => {
+    getMovieDetails(id).then(data => {
       setMovieInfo(data)
       onChangeMovieInfo(data);
     }).catch(() => {})
-  }, [movieId])
+  }, [id])
 
   return (
     <div>
@@ -21,7 +20,7 @@ function MovieInfo ({ movieId, onChangeMovieInfo }) {
         <p>Movie info</p>
         {movieInfo && (
           <ul>
-            <li><b>Movie ID:</b> {movieId}</li>
+            <li><b>Movie ID:</b> {id}</li>
             {Object.entries(movieInfo).map(([label, value]) => (
               <li key={label}>
                 <b style={{marginRight: 10}}>{label}:</b>
