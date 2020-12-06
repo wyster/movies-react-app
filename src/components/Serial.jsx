@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, createRef, useRef } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import Translators from './Serial/Translators'
 import Seasons from './Serial/Seasons'
 import Episodes from './Serial/Episodes'

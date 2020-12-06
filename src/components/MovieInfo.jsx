@@ -14,9 +14,7 @@ function MovieInfo ({
   id,
   onChangeMovieInfo = () => {}
 }) {
-  const [load, { called, loading, error, data }] = useLazyQuery(
-    GET_MOVIE_DETAILS
-  )
+  const [load, { called, loading, error, data }] = useLazyQuery(GET_MOVIE_DETAILS)
 
   useEffect(() => {
     load({ variables: { id } })

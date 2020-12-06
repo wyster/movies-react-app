@@ -1,10 +1,18 @@
 import { useEffect, useState } from 'react'
 import * as yup from 'yup'
 import MovieId from './MovieId'
-import MovieInfo from './MovieInfo'
 import Serial from './Serial'
-import { getMovieDetails } from '../service/MovieService'
 import { Link } from 'react-router-dom'
+import { useLazyQuery } from '@apollo/react-hooks'
+import gql from 'graphql-tag'
+
+const GET_MOVIE_DETAILS = gql`
+  query MovieDetails($id: Number) {
+    movie(id: $id) @rest(type: "Movie", path: "details?id={args.id}") {
+      isSerial
+    }
+  }
+`
 
 const querySchema = yup.object().shape({
   translator: yup.number().nullable(),
@@ -28,6 +36,18 @@ function Main () {
     volume: 100,
     autoPlay: false
   })
+  const [loadMovieDetails, { data: movieData }] = useLazyQuery(GET_MOVIE_DETAILS)
+
+  useEffect(() => {
+    if (!movieData) {
+      return
+    }
+    setMovieInfo(movieData.movie)
+  }, [movieData])
+
+  useEffect(() => {
+    loadMovieDetails({ variables: { id: movieId } })
+  }, [movieId])
 
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search)
@@ -35,17 +55,11 @@ function Main () {
 
     window.addEventListener('popstate', event => {
       if (event.state === null) {
-        return;
+        return
       }
       setQuery(q => ({ ...q, ...querySchema.cast(event.state) }))
     })
   }, [])
-
-  useEffect(() => {
-    getMovieDetails(movieId).then(data => {
-      setMovieInfo(data);
-    }).catch(e => console.error(e))
-  }, [movieId])
 
   function onChangeMovieId (value) {
     setMovieId(value)

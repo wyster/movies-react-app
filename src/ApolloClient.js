@@ -9,6 +9,11 @@ const restLink = new RestLink({
 const client = new ApolloClient({
   link: restLink,
   cache: new InMemoryCache(),
+  defaultOptions: {
+    watchQuery: {
+      fetchPolicy: 'cache-first',
+    },
+  },
 });
 
 export { client };
