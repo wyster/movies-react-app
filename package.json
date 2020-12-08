@@ -12,6 +12,8 @@
     "apollo-link": "^1.2.14",
     "apollo-link-rest": "^0.7",
     "bootstrap": "^4.5.3",
+    "cross-fetch": "^3.0.6",
+    "express": "^4.17.1",
     "graphql": "^15.4.0",
     "graphql-anywhere": "^4.2.7",
     "graphql-tag": "^2.11.0",
@@ -22,10 +24,11 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
     "web-vitals": "^0.2.4",
+    "webpack-cli": "^4.2.0",
     "yup": "^0.31.0"
   },
   "scripts": {
-    "start": "node bin/index.js",
+    "start": "webpack -c ssr/webpack.config.js && node bin/index.js",
     "start:dev": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -48,5 +51,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "babel-loader": "8.1.0"
   }
 }
