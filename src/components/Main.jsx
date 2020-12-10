@@ -46,6 +46,9 @@ function Main () {
   }, [movieData])
 
   useEffect(() => {
+    if (movieId === null) {
+      return
+    }
     loadMovieDetails({ variables: { id: movieId } })
   }, [movieId])
 
