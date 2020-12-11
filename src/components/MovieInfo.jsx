@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useLazyQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 
 const GET_MOVIE_DETAILS = gql`
@@ -14,17 +14,13 @@ function MovieInfo ({
   id,
   onChangeMovieInfo = () => {}
 }) {
-  const [load, { called, loading, error, data }] = useLazyQuery(GET_MOVIE_DETAILS)
-
-  useEffect(() => {
-    load({ variables: { id } })
-  }, [id])
+  const { loading, error, data } = useQuery(GET_MOVIE_DETAILS, { variables: { id } })
 
   useEffect(() => {
     onChangeMovieInfo(data)
   }, [data])
 
-  if (!called || loading) {
+  if (loading) {
     return 'Loading...'
   }
 

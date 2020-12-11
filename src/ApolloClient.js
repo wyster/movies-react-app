@@ -1,5 +1,4 @@
-import { ApolloClient } from 'apollo-client';
-import { InMemoryCache } from 'apollo-cache-inmemory';
+import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { RestLink } from 'apollo-link-rest';
 
 const restLink = new RestLink({
@@ -8,7 +7,7 @@ const restLink = new RestLink({
 
 const client = new ApolloClient({
   link: restLink,
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache().restore(window.__APOLLO_STATE__),
   defaultOptions: {
     watchQuery: {
       fetchPolicy: 'cache-first',

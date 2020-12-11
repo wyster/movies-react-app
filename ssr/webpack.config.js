@@ -1,5 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
+const nodeExternals = require('webpack-node-externals')
 
 module.exports = {
   target: 'node',
@@ -7,6 +8,7 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx'],
   },
+  externals: [nodeExternals()],
   plugins: [
     new webpack.ProvidePlugin({
       'React': 'react'
@@ -26,12 +28,24 @@ module.exports = {
           loader: 'babel-loader',
           options: {
             presets: [
-              '@babel/preset-env',
+              [
+                '@babel/preset-env',
+                {
+                  "targets": {
+                    "node": "14"
+                  }
+                }
+              ],
               '@babel/preset-react'
             ]
           }
         }
       }
     ]
+  },
+  node: {
+    global: false,
+    __filename: false,
+    __dirname: false,
   }
 }
