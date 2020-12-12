@@ -47,20 +47,39 @@ jobs:
           CI: true
         run: yarn start
 
-  push_to_registry:
+  prepare_publish:
     needs: build
 
-    name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v2
       - name: Set output
         id: branch
         run: echo ::set-output name=result::${GITHUB_REF#refs/heads/}
+      - uses: actions/github-script@v3
+        id: tag
+        with:
+          script: |
+            const ref = process.env.GITHUB_REF
+            if (!ref) {
+              throw "GITHUB_REF is not defined"
+            }
+            if (!ref.startsWith("refs/tags/")) {
+              return
+            }
+            const tag = ref.replace(/^refs\/tags\//, "")
+            return tag
 
+  push_to_registry:
+    needs: prepare_publish
+    if: ${{ steps.branch.outputs.result == 'master' }}
+
+    name: Push Docker image to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
-        if: ${{ steps.branch.outputs.result == 'master' }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
@@ -79,11 +98,22 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-buildx-
 
-      - name: Push to Docker Hub
+      - name: Push latest to Docker Hub
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ${{ secrets.DOCKERHUB_REPOSITORY }}:movies-react-app-latest
+          tags: ${{ secrets.DOCKERHUB_REPOSITORY }}:latest
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
+          build-args: |
+            APP_API_URL=${{ secrets.APP_API_URL }}
+
+      - name: Push tag to Docker Hub
+        uses: docker/build-push-action@v2
+        if: ${{ steps.tag.outputs.result != '' }}
+        with:
+          push: true
+          tags: ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ steps.tag.outputs.result }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
           build-args: |
