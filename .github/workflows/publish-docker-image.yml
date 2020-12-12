@@ -48,11 +48,6 @@ jobs:
           CI: false
         run: yarn build:ssr
 
-      - name: Run SSR
-        env:
-          CI: true
-        run: yarn start
-
   prepare_publish:
     needs: build
     name: Prepare Publish

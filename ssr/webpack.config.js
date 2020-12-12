@@ -43,7 +43,7 @@ module.exports = {
         }
       },
       {
-        test: /(?!\.jsx?)$/,
+        test: /(\.(?!(?:jsx?)$).{1,5}$)/,
         use: ['ignore-loader'],
       }
     ],
