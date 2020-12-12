@@ -30,14 +30,14 @@ jobs:
       - name: Run tests
         env:
           CI: true
-        run: yarn test --if-present
+        run: yarn test
 
       - name: Build frontend
         env:
           CI: true
-        run: yarn build --if-present
+        run: yarn build
 
       - name: Build SSR
         env:
           CI: true
-        run: yarn build:ssr --if-present
+        run: yarn build:ssr
