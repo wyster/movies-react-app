@@ -1,35 +1,40 @@
-import { useCallback, useEffect, useState } from 'react'
-import { findMovieId } from '../service/MovieService'
+import { useEffect, useState } from 'react'
+import gql from 'graphql-tag'
+import { useLazyQuery } from '@apollo/react-hooks'
+
+const GET_MOVIE_ID = gql`
+  query MovieId($url: String) {
+    movie(url: $url) @rest(type: "Movie", path: "id-from-url?url={args.url}") {
+      id
+    }
+  }
+`
 
 function MovieId ({ onChangeMovieId }) {
+  const [load, { loading, error, data }] = useLazyQuery(GET_MOVIE_ID)
   const [movieUrl, setMovieUrl] = useState('')
   const [movieId, setMovieId] = useState(null)
 
-  const findIdByUrl = useCallback(value => {
-    if (value === movieUrl) {
+  useEffect(() => {
+    if (!data) {
       return
     }
-    if (!value) {
-      setMovieId(null)
-      onChangeMovieId(null)
+    const { id }  = data.movie
+    setMovieId(id)
+    onChangeMovieId(id)
+  }, [data])
+
+  useEffect(() => {
+    if (!movieUrl) {
       return
     }
-    if (Number.isInteger(parseInt(value, 10))) {
-      setMovieId(parseInt(value, 10));
-      onChangeMovieId(parseInt(value, 10))
-      return
-    }
-    findMovieId(value).then(data => {
-      setMovieId(data.id)
-      onChangeMovieId(data.id)
-    }).catch(() => {})
-  }, [onChangeMovieId])
+    load({ variables: { url: movieUrl } })
+  }, [movieUrl])
 
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search)
     const url = searchParams.get('movieUrl')
     if (url) {
-      findIdByUrl(url)
       setMovieUrl(url)
     }
   }, [])
@@ -42,7 +47,7 @@ function MovieId ({ onChangeMovieId }) {
       searchParams.set('movieUrl', value)
       window.history.pushState({}, document.title, `?${searchParams.toString()}`)
     }
-    findIdByUrl(value)
+    load({ variables: { url: value } })
     setMovieUrl(value)
   }
 
@@ -53,12 +58,18 @@ function MovieId ({ onChangeMovieId }) {
         <input
           onChange={(e) => onChange(e.target.value)}
           value={movieUrl}
-          className='form-control'
+          className={`form-control ${error ? 'is-invalid' : ''}`}
         />
+        {loading && (
+          <div className="input-group-text">
+            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        )}
         {movieUrl && (
           <button
             onClick={() => onChange('')}
-            className='btn btn-success'
+            className="btn btn-success"
           >
             Reset
           </button>

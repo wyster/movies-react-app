@@ -8,7 +8,7 @@ import gql from 'graphql-tag'
 
 const GET_MOVIE_DETAILS = gql`
   query MovieDetails($id: Number) {
-    movie(id: $id) @rest(type: "Movie", path: "details?id={args.id}") {
+    details(id: $id) @rest(type: "Movie", path: "details?id={args.id}") {
       isSerial
     }
   }
@@ -42,7 +42,7 @@ function Main () {
     if (!movieData) {
       return
     }
-    setMovieInfo(movieData.movie)
+    setMovieInfo(movieData.details)
   }, [movieData])
 
   useEffect(() => {
