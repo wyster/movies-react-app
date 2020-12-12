@@ -52,13 +52,8 @@ jobs:
 
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
+    if: ${{ GITHUB_REF#refs/heads/ == 'master' }}
     steps:
-      - name: Set branch
-        id: branch
-        run: echo ::set-output name=result::${GITHUB_REF#refs/heads/}
-
-      - name: Prepare Publish
-        if: ${{ steps.branch.outputs.result == 'master' }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
