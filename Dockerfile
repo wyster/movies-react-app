@@ -6,7 +6,7 @@ ARG APP_API_URL
 COPY . /app
 WORKDIR /app
 
-RUN yarn install --production
+RUN yarn install --production --frozen-lockfile
 RUN REACT_APP_API_URL=${APP_API_URL} yarn build
 RUN REACT_APP_API_URL=${APP_API_URL} yarn build:ssr
 
