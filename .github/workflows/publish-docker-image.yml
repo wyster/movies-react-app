@@ -119,17 +119,6 @@ jobs:
           build-args: |
             APP_API_URL=${{ secrets.APP_API_URL }}
 
-      - name: Push tag to Docker Hub
-        uses: docker/build-push-action@v2
-        if: ${{ needs.prepare_publish.outputs.tag != '' }}
-        with:
-          push: true
-          tags: ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ steps.tag.outputs.result }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
-          build-args: |
-            APP_API_URL=${{ secrets.APP_API_URL }}
-
   push_tag_to_registry:
     needs: prepare_publish
     if: ${{ needs.prepare_publish.outputs.tag != '' }}
@@ -162,7 +151,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ steps.tag.outputs.result }}
+          tags: ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ needs.prepare_publish.outputs.tag }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
           build-args: |
