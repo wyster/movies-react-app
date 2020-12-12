@@ -4,7 +4,7 @@ import { useLazyQuery } from '@apollo/react-hooks'
 
 const GET_MOVIE_ID = gql`
   query MovieId($url: String) {
-    movie(url: $url) @rest(type: "Movie", path: "id-from-url?url={args.url}") {
+    movie(url: $url) @rest(type: "MovieId", path: "id-from-url?url={args.url}") {
       id
     }
   }

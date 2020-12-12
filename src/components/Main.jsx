@@ -8,7 +8,7 @@ import gql from 'graphql-tag'
 
 const GET_MOVIE_DETAILS = gql`
   query MovieDetails($id: Number) {
-    details(id: $id) @rest(type: "Movie", path: "details?id={args.id}") {
+    details(id: $id) @rest(type: "MovieDetails", path: "details?id={args.id}") {
       isSerial
     }
   }

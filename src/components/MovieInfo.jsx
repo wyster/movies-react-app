@@ -4,7 +4,7 @@ import gql from 'graphql-tag'
 
 const GET_MOVIE_DETAILS = gql`
   query MovieDetails($id: Number) {
-    details(id: $id) @rest(type: "Movie", path: "details?id={args.id}") {
+    movie(id: $id) @rest(type: "MovieDetails", path: "details?id={args.id}") {
       isSerial
     }
   }
@@ -35,14 +35,14 @@ function MovieInfo ({
     return `Error! ${error}`
   }
 
-  const details = data.details
+  const { movie } = data
 
   return (
     <>
       <p>Movie info</p>
       <ul>
         <li><b>Movie ID:</b> {id}</li>
-        {Object.entries(details).map(([label, value]) => (
+        {Object.entries(movie).map(([label, value]) => (
           <li key={label}>
             <b style={{ marginRight: 10 }}>{label}:</b>
             {Array.isArray(value) && JSON.stringify(value)}

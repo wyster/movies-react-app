@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/react-hooks'
 
 const GET_MOVIE_TRANSLATORS = gql`
   query MovieTranslators($id: Number) {
-    movie(id: $id) @rest(type: "Translator", path: "movie/{args.id}") {
+    movie(id: $id) @rest(type: "MovieTranslators", path: "movie/{args.id}") {
       translators {
         id,
         title
