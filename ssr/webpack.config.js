@@ -7,7 +7,9 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx'],
   },
-  externals: [nodeExternals()],
+  externals: [nodeExternals({
+    allowlist: [/\.(?!(?:jsx?)$).{1,5}$/i],
+  })],
   plugins: [
     new webpack.ProvidePlugin({
       'React': 'react'
@@ -30,8 +32,8 @@ module.exports = {
               [
                 '@babel/preset-env',
                 {
-                  "targets": {
-                    "node": "14"
+                  'targets': {
+                    'node': '14'
                   }
                 }
               ],
@@ -39,8 +41,12 @@ module.exports = {
             ]
           }
         }
+      },
+      {
+        test: /(?!\.jsx?)$/,
+        use: ['ignore-loader'],
       }
-    ]
+    ],
   },
   node: {
     global: false,
