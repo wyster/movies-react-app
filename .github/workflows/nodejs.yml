@@ -1,0 +1,36 @@
+name: Node.js CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x, 14.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: yarn install --frozen-lockfile
+        env:
+          CI: true
+      - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      - name: Build frontend
+        with:
+          node-version: ${{ matrix.node-version }}
+        - run: yarn build --if-present
+          env:
+            CI: true
+      - name: Build SSR
+        with:
+          node-version: ${{ matrix.node-version }}
+        - run: yarn build:ssr --if-present
+          env:
+            CI: true
