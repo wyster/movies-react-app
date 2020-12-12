@@ -60,7 +60,7 @@ jobs:
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
-        if: ${{ steps.branch.outputs.result == 'master }}
+        if: ${{ steps.branch.outputs.result == 'master' }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
