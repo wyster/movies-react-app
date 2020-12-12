@@ -52,11 +52,15 @@ jobs:
 
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
-    if: ${{ GITHUB_REF#refs/heads/ == 'master' }}
     steps:
+      - uses: actions/checkout@v2
+      - name: Set output
+        id: branch
+        run: echo ::set-output name=result::${GITHUB_REF#refs/heads/}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
+        if: ${{ steps.branch.outputs.result == 'master }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
