@@ -63,7 +63,13 @@ function Serial ({
     getVideoInfoFromServer({ serialId, translatorId, seasonId, episodeId })
   }, [serialId, translatorId, seasonId, episodeId])
 
+  useEffect(() => {
+    setVideos([])
+  }, [serialId, translatorId, seasonId, episodeId])
+
   function onClickOnTranslator (translatorId) {
+    setSeasonId(null);
+    setEpisodeId(null);
     setTranslatorId(translatorId)
 
     onUpdateState({ translator: translatorId })
