@@ -23,6 +23,11 @@ jobs:
         env:
           CI: true
 
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node-packages-${{ hashFiles('**/yarn.lock') }}
+
       - name: Install packages
         env:
           CI: true
