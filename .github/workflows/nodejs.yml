@@ -28,22 +28,16 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Run tests
-        with:
-          node-version: ${{ matrix.node-version }}
         env:
           CI: true
         run: yarn test --if-present
 
       - name: Build frontend
-        with:
-          node-version: ${{ matrix.node-version }}
         env:
           CI: true
         run: yarn build --if-present
 
       - name: Build SSR
-        with:
-          node-version: ${{ matrix.node-version }}
         env:
           CI: true
         run: yarn build:ssr --if-present
