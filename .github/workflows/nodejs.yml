@@ -35,10 +35,10 @@ jobs:
 
       - name: Build frontend
         env:
-          CI: true
+          CI: false
         run: yarn build
 
       - name: Build SSR
         env:
-          CI: true
+          CI: false
         run: yarn build:ssr
