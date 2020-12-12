@@ -56,14 +56,17 @@ function Serial ({
   }, [episodes, seasonId])
 
   useEffect(() => {
-    if (translatorId == null || seasonId == null || episodeId === null) {
+    if (translatorId === null || seasonId === null || episodeId === null) {
       return
     }
     getVideoInfoFromServer({ serialId, translatorId, seasonId, episodeId })
   }, [serialId, translatorId, seasonId, episodeId])
 
   useEffect(() => {
-    //setVideos([])
+    if (translatorId !== null && seasonId !== null && episodeId !== null) {
+      return
+    }
+    setVideos([])
   }, [serialId, translatorId, seasonId, episodeId])
 
   function onClickOnTranslator (translatorId) {
