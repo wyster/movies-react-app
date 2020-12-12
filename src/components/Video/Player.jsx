@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
+import video from 'video.js';
+import 'video.js/dist/video-js.css';
 
 function Player ({
   src,
@@ -7,11 +9,12 @@ function Player ({
   onCurrentTimeChange = () => {},
   onChangeVolume = () => {},
   onEnded = () => {},
-  autoPlay = false,
-  fullScreen = false
+  autoPlay = false
 }) {
   const videoElement = useRef()
+  const videoContainer = useRef()
   const [timer, setTimer] = useState(null)
+  const [player, setPlayer] = useState(null);
 
   function timeUpdate (e) {
     const value = parseInt(e.target.currentTime, 10)
@@ -33,18 +36,32 @@ function Player ({
   }
 
   useEffect(() => {
-    if (!videoElement.current || !autoPlay) {
-      return
+    const $video = videoElement.current
+
+    const player = video($video, {
+      fluid: true
+    });
+
+    setPlayer(player);
+
+    return () => {
+      player.dispose();
     }
-    const promise = videoElement.current.play()
-    if (promise !== undefined) {
-      promise.then(_ => {
-        // Autoplay started!
-      }).catch(e => {
-        console.error(e)
-      })
+
+  }, [])
+
+  useEffect(() => {
+    if (!player) {
+      return;
     }
-  }, [src])
+
+    player.src({type: 'video/mp4', src});
+
+    if (autoPlay) {
+      player.play();
+    }
+
+  }, [src, player])
 
   useEffect(() => {
     if (!videoElement.current || !videoElement.current.paused) {
@@ -69,32 +86,18 @@ function Player ({
     videoElement.current.volume = volume / 100
   }, [volume])
 
-  useEffect(() => {
-    if (fullScreen === false || !videoElement.current) {
-      return
-    }
-    videoElement.current.requestFullscreen()
-      .then(_ => {
-        // Full screen started!
-      })
-      .catch(e => {
-        console.error(e)
-      })
-  }, [src])
-
   return (
     <>
-      <video
-        ref={videoElement}
-        controls
-        key={src}
-        style={{ width: '100%', height: '100%' }}
-        onEnded={ended}
-        onTimeUpdate={timeUpdate}
-        onVolumeChange={volumeChange}
-      >
-        <source src={src}/>
-      </video>
+      <div ref={videoContainer} data-vjs-player>
+        <video
+          ref={videoElement}
+          className="video-js"
+          controls
+          onEnded={ended}
+          onTimeUpdate={timeUpdate}
+          onVolumeChange={volumeChange}
+        />
+      </div>
     </>
   )
 }

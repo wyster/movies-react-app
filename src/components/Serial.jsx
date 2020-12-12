@@ -25,7 +25,6 @@ function Serial ({
   const [episodeId, setEpisodeId] = useState(null)
   const [quality, setQuality] = useState(null)
   const [autoPlay, setAutoPlay] = useState(false)
-  const [fullScreen, setFullScreen] = useState(false)
 
   useEffect(() => {
     setTranslatorId(propTranslatorId)
@@ -64,7 +63,7 @@ function Serial ({
   }, [serialId, translatorId, seasonId, episodeId])
 
   useEffect(() => {
-    setVideos([])
+    //setVideos([])
   }, [serialId, translatorId, seasonId, episodeId])
 
   function onClickOnTranslator (translatorId) {
@@ -194,7 +193,6 @@ function Serial ({
                 onChangeVolume={onVolumeChange}
                 onEnded={onEnded}
                 autoPlay={autoPlay === true ? autoPlay : playerAutoPlay}
-                fullScreen={fullScreen}
               />
             </div>
           )}
