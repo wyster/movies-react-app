@@ -89,6 +89,7 @@ function Main () {
   return (
     <div className="container-fluid mt-5 mb-5">
       <MovieId onChangeMovieId={onChangeMovieId}/>
+      <div className="clearfix mb-4" />
       {movieInfo && movieInfo.isSerial && (
         <Serial
           serialId={movieId}

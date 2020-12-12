@@ -47,30 +47,24 @@ function MovieId ({ onChangeMovieId }) {
   }
 
   return (
-    <div>
-      <label>
-        <div className='input-group input-group-lg'>
-          <div className="input-group-prepend">
-            <span className="input-group-text">Movie URL or ID</span>
-          </div>
-          <input
-            onChange={(e) => onChange(e.target.value)}
-            value={movieUrl}
-            className='form-control'
-          />
-          {movieUrl && (
-            <div className="input-group-append">
-              <button
-                onClick={() => onChange('')}
-                className='btn btn-success'
-              >
-                Reset
-              </button>
-            </div>
-          )}
-        </div>
-      </label>
-    </div>
+    <label className="w-100">
+      <div className="input-group input-group-lg">
+        <div className="input-group-text">Movie URL or ID</div>
+        <input
+          onChange={(e) => onChange(e.target.value)}
+          value={movieUrl}
+          className='form-control'
+        />
+        {movieUrl && (
+          <button
+            onClick={() => onChange('')}
+            className='btn btn-success'
+          >
+            Reset
+          </button>
+        )}
+      </div>
+    </label>
   )
 }
 
