@@ -14,24 +14,32 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: c-hive/gha-yarn-cache@v1
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-        - run: yarn install --frozen-lockfile
         env:
           CI: true
-      - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+        run: yarn install --frozen-lockfile
+
+      - name: Tests
+        with:
+          node-version: ${{ matrix.node-version }}
+        env:
+          CI: true
+        run: yarn test --if-present
+
       - name: Build frontend
         with:
           node-version: ${{ matrix.node-version }}
-        - run: yarn build --if-present
-          env:
-            CI: true
+        env:
+          CI: true
+        run: yarn build --if-present
+
       - name: Build SSR
         with:
           node-version: ${{ matrix.node-version }}
-        - run: yarn build:ssr --if-present
-          env:
-            CI: true
+        env:
+          CI: true
+        run: yarn build:ssr --if-present
