@@ -72,14 +72,12 @@ jobs:
         with:
           script: |
             const ref = process.env.GITHUB_REF
-            if (!ref) {
-              throw "GITHUB_REF is not defined"
-            }
             if (!ref.startsWith("refs/tags/")) {
-              return
+              return ''
             }
             const tag = ref.replace(/^refs\/tags\//, "")
             return tag
+          result-encoding: string
 
   push_master_to_registry:
     needs: prepare_publish
