@@ -1,21 +1,15 @@
 import path from 'path'
 import fs from 'fs'
-import React from 'react'
 import fetch from 'isomorphic-fetch'
 import ReactDOMServer from 'react-dom/server'
-import {
-  ApolloProvider,
-  ApolloClient,
-  InMemoryCache
-} from '@apollo/client'
+import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client'
 import Express from 'express'
 import { StaticRouter } from 'react-router'
 import { renderToStringWithData } from '@apollo/client/react/ssr'
 import { RestLink } from 'apollo-link-rest'
+import Router from 'express-promise-router'
 
 import Layout from '../src/routes/Layout'
-
-import Router from 'express-promise-router'
 
 if (!process.env.REACT_APP_API_URL) {
   throw new Error('process.env.REACT_APP_API_URL not defined!');

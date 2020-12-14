@@ -1,38 +1,18 @@
-import { ApolloProvider } from '@apollo/client';
+import { ApolloProvider } from '@apollo/client'
+import { BrowserRouter as Router, } from 'react-router-dom'
+
 import './App.css'
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route
-} from 'react-router-dom'
 import { client } from './ApolloClient'
-import routes from './routes'
+import Layout from '../src/routes/Layout'
 
 function App () {
   return (
-    <Router>
-      <div className="container-fluid mt-3 mb-3">
-        <Switch>
-          {routes.map((route, i) => (
-            <Route
-              exact
-              key={route.path}
-              path={route.path}
-              render={props => (
-                <route.component {...props} />
-              )}
-            />
-          ))}
-        </Switch>
-      </div>
-    </Router>
+    <ApolloProvider client={client}>
+      <Router>
+        <Layout/>
+      </Router>
+    </ApolloProvider>
   )
 }
 
-const ApolloApp = () => (
-  <ApolloProvider client={client}>
-    <App/>
-  </ApolloProvider>
-)
-
-export default ApolloApp
+export default App
