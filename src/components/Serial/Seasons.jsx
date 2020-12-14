@@ -5,17 +5,16 @@ function Seasons({seasons, seasonId, onClickOnSeason}) {
         <>
           <nav className="nav nav-pills">
             {seasons.map(item => (
-              <a
+              <button
                 key={item.id}
-                className={`nav-link ${seasonId === item.id ? 'active' : ''}`}
-                href="#"
+                className={`btn btn-link nav-link ${seasonId === item.id ? 'active' : ''}`}
                 onClick={(e) => {
                   e.preventDefault();
                   onClickOnSeason(item.id)
                 }}
               >
                 {item.title}
-              </a>
+              </button>
             ))}
           </nav>
         </>

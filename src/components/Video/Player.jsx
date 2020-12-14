@@ -60,7 +60,7 @@ function Player ({
     if (autoPlay) {
       player.play();
     }
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [src, player])
 
   useEffect(() => {

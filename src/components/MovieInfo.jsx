@@ -21,6 +21,7 @@ function MovieInfo ({
       return;
     }
     onChangeMovieInfo(data)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data])
 
   if (loading) {

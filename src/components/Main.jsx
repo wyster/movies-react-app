@@ -50,6 +50,7 @@ function Main () {
       return
     }
     loadMovieDetails({ variables: { id: movieId } })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [movieId])
 
   useEffect(() => {

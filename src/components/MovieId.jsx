@@ -13,15 +13,14 @@ const GET_MOVIE_ID = gql`
 function MovieId ({ onChangeMovieId }) {
   const [load, { loading, error, data }] = useLazyQuery(GET_MOVIE_ID)
   const [movieUrl, setMovieUrl] = useState('')
-  const [movieId, setMovieId] = useState(null)
 
   useEffect(() => {
     if (!data) {
       return
     }
     const { id }  = data.movie
-    setMovieId(id)
     onChangeMovieId(id)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data])
 
   useEffect(() => {
@@ -29,6 +28,7 @@ function MovieId ({ onChangeMovieId }) {
       return
     }
     load({ variables: { url: movieUrl } })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [movieUrl])
 
   useEffect(() => {

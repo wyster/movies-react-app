@@ -9,17 +9,17 @@ function Episodes({
         <>
           <nav className="nav nav-pills">
             {episodes.map(item => (
-              <a
+              <button
+                type="button"
                 key={item.episode}
-                className={`nav-link ${episodeId === item.episode ? 'active' : ''}`}
-                href="#"
+                className={`btn btn-link nav-link ${episodeId === item.episode ? 'active' : ''}`}
                 onClick={(e) => {
                   e.preventDefault();
                   onClickOnEpisode(item.episode)
                 }}
               >
                 {item.title}
-              </a>
+              </button>
             ))}
           </nav>
         </>

@@ -5,17 +5,17 @@ function QualityChoices({qualities, quality, onClickOnQuality}) {
         <>
           <nav className="nav nav-pills">
             {qualities.map(item => (
-              <a
+              <button
+                type="button"
                 key={item.quality}
-                className={`nav-link ${quality === item.quality ? 'active' : ''}`}
-                href="#"
+                className={`btn btn-link nav-link ${quality === item.quality ? 'active' : ''}`}
                 onClick={(e) => {
                   e.preventDefault();
                   onClickOnQuality(item.quality)
                 }}
               >
                 {item.quality}
-              </a>
+              </button>
             ))}
           </nav>
         </>

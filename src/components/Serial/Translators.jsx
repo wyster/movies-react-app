@@ -34,17 +34,17 @@ function Translators ({ serialId, translatorId, onClickOnTranslator }) {
       {translators.length > 0 && (
         <nav className="nav nav-pills">
           {translators.map(translator => (
-            <a
+            <button
+              type="button"
               key={translator.id}
-              className={`nav-link ${translatorId === translator.id ? 'active' : ''}`}
-              href="#"
+              className={`btn btn-link nav-link ${translatorId === translator.id ? 'active' : ''}`}
               onClick={e => {
                 e.preventDefault();
                 onClickOnTranslator(translator.id)
               }}
             >
               {translator.title}
-            </a>
+            </button>
           ))}
         </nav>
       )}

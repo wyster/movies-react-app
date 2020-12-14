@@ -148,8 +148,8 @@ function Serial ({
     if (nextEpisode) {
       onClickOnEpisode(nextEpisode.episode)
       setAutoPlay(true)
-      //setFullScreen(true)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [episodeId, seasonEpisodes])
 
   return (
