@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import video from 'video.js';
 import 'video.js/dist/video-js.css';
+import 'videojs-hotkeys';
 
 function Player ({
   src,
@@ -41,6 +42,10 @@ function Player ({
     const player = video($video, {
       fluid: true
     });
+
+    player.ready(function() {
+      this.hotkeys();
+    })
 
     setPlayer(player);
 

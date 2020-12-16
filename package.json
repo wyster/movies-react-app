@@ -26,6 +26,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
     "video.js": "^7.10.2",
+    "videojs-hotkeys": "^0.2.27",
     "web-vitals": "^0.2.4",
     "webpack-cli": "^4.2.0",
     "webpack-node-externals": "^2.5.2",
