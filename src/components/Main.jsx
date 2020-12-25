@@ -87,6 +87,7 @@ function Main () {
       return
     }
     window.history.pushState({...query, ...values}, document.title, newQuery)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
   return (
