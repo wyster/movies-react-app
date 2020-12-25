@@ -80,6 +80,7 @@ function Serial ({
 
   function onClickOnSeason (seasonId) {
     setSeasonId(seasonId)
+    setEpisodeId(1);
 
     onUpdateState({ season: seasonId })
   }
@@ -149,9 +150,18 @@ function Serial ({
     if (nextEpisode) {
       onClickOnEpisode(nextEpisode.episode)
       setAutoPlay(true)
+    } else {
+      const nextSeasonId = seasonId + 1
+      const nextSeason = seasons.find(item => {
+        return item.id === nextSeasonId
+      })
+      if (nextSeason) {
+        onClickOnSeason(nextSeasonId);
+        setAutoPlay(true)
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [episodeId, seasonEpisodes])
+  }, [episodeId, seasonId, seasonEpisodes, seasons])
 
   return (
     <>
