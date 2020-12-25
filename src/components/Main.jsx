@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import * as yup from 'yup'
 import MovieId from './MovieId'
 import Serial from './Serial'
@@ -25,9 +25,7 @@ const querySchema = yup.object().shape({
 })
 
 function Main () {
-  const [movieId, setMovieId] = useState(null)
-  const [movieInfo, setMovieInfo] = useState(null)
-  const [query, setQuery] = useState({
+  const defaultQuery = {
     translator: null,
     episode: null,
     season: null,
@@ -35,7 +33,10 @@ function Main () {
     time: 0,
     volume: 100,
     autoPlay: false
-  })
+  };
+  const [movieId, setMovieId] = useState(null)
+  const [movieInfo, setMovieInfo] = useState(null)
+  const [query, setQuery] = useState(defaultQuery)
   const [loadMovieDetails, { data: movieData }] = useLazyQuery(GET_MOVIE_DETAILS)
 
   useEffect(() => {
@@ -61,8 +62,9 @@ function Main () {
       if (event.state === null) {
         return
       }
-      setQuery(q => ({ ...q, ...querySchema.cast(event.state) }))
+      setQuery(q => ({...defaultQuery, ...querySchema.cast(event.state) }))
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   function onChangeMovieId (value) {
@@ -72,8 +74,8 @@ function Main () {
     }
   }
 
-  function onUpdateState (values) {
-    setQuery(q => ({ ...q, ...values }))
+  const onUpdateState = useCallback(values => {
+    setQuery({...defaultQuery, ...query, ...values })
 
     const searchParams = new URLSearchParams(window.location.search)
     Object.entries(values).forEach(item => {
@@ -84,8 +86,8 @@ function Main () {
     if (window.location.search === newQuery) {
       return
     }
-    window.history.pushState(values, document.title, newQuery)
-  }
+    window.history.pushState({...query, ...values}, document.title, newQuery)
+  }, [query]);
 
   return (
     <div className="container-fluid mt-5 mb-5">

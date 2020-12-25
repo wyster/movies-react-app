@@ -44,6 +44,7 @@ function Serial ({
 
   useEffect(() => {
     if (translatorId == null) {
+      setSeasons([]);
       return
     }
     getEpisodesFromServer(serialId, translatorId)
