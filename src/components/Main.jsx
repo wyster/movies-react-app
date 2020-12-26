@@ -9,7 +9,8 @@ import gql from 'graphql-tag'
 const GET_MOVIE_DETAILS = gql`
   query MovieDetails($id: Number) {
     details(id: $id) @rest(type: "MovieDetails", path: "details?id={args.id}") {
-      isSerial
+      isSerial,
+      name
     }
   }
 `
@@ -47,6 +48,20 @@ function Main () {
   }, [movieData])
 
   useEffect(() => {
+    if (!movieInfo) {
+      return
+    }
+    document.title = movieInfo.name
+  }, [movieInfo])
+
+  useEffect(() => {
+    if (!movieInfo || !query) {
+      return
+    }
+    buildDocumentTitle(movieInfo, query)
+  }, [movieInfo, query])
+
+  useEffect(() => {
     if (movieId === null) {
       return
     }
@@ -75,7 +90,7 @@ function Main () {
   }
 
   const onUpdateState = useCallback(values => {
-    setQuery({...defaultQuery, ...query, ...values })
+    setQuery(q => ({...defaultQuery, ...q, ...values }))
 
     const searchParams = new URLSearchParams(window.location.search)
     Object.entries(values).forEach(item => {
@@ -86,9 +101,22 @@ function Main () {
     if (window.location.search === newQuery) {
       return
     }
-    window.history.pushState({...query, ...values}, document.title, newQuery)
+    const data = {...window.history.state, ...values};
+    window.history.pushState(data, document.title, newQuery)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
+
+  function buildDocumentTitle(movieInfo, queryData) {
+    const title = [movieInfo.name];
+    if (queryData.season) {
+      title.push(`Сезон ${queryData.season}`)
+    }
+    if (queryData.episode) {
+      title.push(`Серия ${queryData.episode}`)
+    }
+
+    document.title = title.join(' / ')
+  }
 
   return (
     <div className="container-fluid mt-5 mb-5">
