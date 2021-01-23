@@ -4,6 +4,25 @@ import Seasons from './Serial/Seasons'
 import Episodes from './Serial/Episodes'
 import QualityChoices from './Video/QualityChoices'
 import Player from './Video/Player'
+import gql from 'graphql-tag'
+import { useLazyQuery } from '@apollo/react-hooks'
+
+const GET_SERIAL_DATA = gql`
+  query SerialData($serialId: Number, $translatorId: Number) {
+    data(serialId: $serialId, translatorId: $translatorId) @rest(type: "SerialData", path: "serial/episodes?id={args.serialId}&translator_id={args.translatorId}") {
+      episodes,
+      seasons
+    }
+  }
+`
+
+const GET_PLAYER = gql`
+  query MoviePlayer($serialId: Number, $translatorId: Number, $episodeId: Number, $seasonId: Number) {
+    data(serialId: $serialId, translatorId: $translatorId, episodeId: $episodeId, seasonId: $seasonId) @rest(type: "MoviePlayer", path: "serial/player?id={args.serialId}&translator_id={args.translatorId}&episode={args.episodeId}&season={args.seasonId}") {
+      uri
+    }
+  }
+`
 
 function Serial ({
   serialId,
@@ -16,15 +35,23 @@ function Serial ({
   playerVolume = 100,
   playerAutoPlay = false
 }) {
+  const [getSerialData, { data: serialData }] = useLazyQuery(GET_SERIAL_DATA);
+  const [getPlayerData, { data: playerData }] = useLazyQuery(GET_PLAYER);
+
   const [translatorId, setTranslatorId] = useState(null)
-  const [episodes, setEpisodes] = useState([])
   const [seasonEpisodes, setSeasonEpisodes] = useState([])
-  const [seasons, setSeasons] = useState([])
   const [videos, setVideos] = useState([])
   const [seasonId, setSeasonId] = useState(null)
   const [episodeId, setEpisodeId] = useState(null)
   const [quality, setQuality] = useState(null)
   const [autoPlay, setAutoPlay] = useState(false)
+
+  useEffect(() => {
+    if (!playerData) {
+      return;
+    }
+    setVideos(playerData.data.uri);
+  }, [playerData])
 
   useEffect(() => {
     setTranslatorId(propTranslatorId)
@@ -44,23 +71,27 @@ function Serial ({
 
   useEffect(() => {
     if (translatorId == null) {
-      setSeasons([]);
       return
     }
-    getEpisodesFromServer(serialId, translatorId)
+    getSerialData({ variables: { serialId, translatorId } })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [serialId, translatorId])
 
   useEffect(() => {
-    setSeasonEpisodes(episodes.filter(item => {
+    if (!serialData) {
+      return;
+    }
+    setSeasonEpisodes(serialData.data.episodes.filter(item => {
       return item.season === seasonId
     }))
-  }, [episodes, seasonId])
+  }, [serialData, seasonId])
 
   useEffect(() => {
     if (translatorId === null || seasonId === null || episodeId === null) {
       return
     }
-    getVideoInfoFromServer({ serialId, translatorId, seasonId, episodeId })
+    getPlayerData({ variables: { serialId, translatorId, seasonId, episodeId} })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [serialId, translatorId, seasonId, episodeId])
 
   useEffect(() => {
@@ -98,30 +129,6 @@ function Serial ({
     onUpdateState({ quality })
   }
 
-  function getEpisodesFromServer (serialId, translatorId) {
-    fetch(`${process.env.REACT_APP_API_URL}/serial/episodes?id=${serialId}&translator_id=${translatorId}`).then(response => {
-      if (!response.ok) {
-        throw Error(response.statusText)
-      }
-      return response.json()
-    }).then(data => {
-      setEpisodes(data.episodes)
-      setSeasons(data.seasons)
-    }).catch(() => {})
-  }
-
-  function getVideoInfoFromServer ({ serialId, translatorId, seasonId, episodeId }) {
-    const url = `${process.env.REACT_APP_API_URL}/serial/player?id=${serialId}&translator_id=${translatorId}&episode=${episodeId}&season=${seasonId}`
-    fetch(url).then(response => {
-      if (!response.ok) {
-        throw Error(response.statusText)
-      }
-      return response.json()
-    }).then(data => {
-      setVideos(data.uri)
-    }).catch(() => {})
-  }
-
   function getVideoSrc (quality) {
     const video = videos.find(value => {
       return value.quality === quality
@@ -152,7 +159,7 @@ function Serial ({
       setAutoPlay(true)
     } else {
       const nextSeasonId = seasonId + 1
-      const nextSeason = seasons.find(item => {
+      const nextSeason = serialData.data.seasons.find(item => {
         return item.id === nextSeasonId
       })
       if (nextSeason) {
@@ -161,7 +168,7 @@ function Serial ({
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [episodeId, seasonId, seasonEpisodes, seasons])
+  }, [episodeId, seasonId, seasonEpisodes, serialData])
 
   return (
     <>
@@ -175,7 +182,7 @@ function Serial ({
       <div className="mt-1">
         <Seasons
           seasonId={seasonId}
-          seasons={seasons}
+          seasons={(serialData && serialData.data.seasons) || []}
           onClickOnSeason={onClickOnSeason}
         />
       </div>
