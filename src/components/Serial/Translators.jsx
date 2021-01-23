@@ -1,5 +1,6 @@
 import gql from 'graphql-tag'
 import { useQuery } from '@apollo/react-hooks'
+import { default as List} from '../Translators'
 
 const GET_MOVIE_TRANSLATORS = gql`
   query MovieTranslators($id: Number) {
@@ -30,25 +31,7 @@ function Translators ({ serialId, translatorId, onClickOnTranslator }) {
   const { translators } = data.movie;
 
   return (
-    <>
-      {translators.length > 0 && (
-        <nav className="nav nav-pills">
-          {translators.map(translator => (
-            <button
-              type="button"
-              key={translator.id}
-              className={`btn btn-link nav-link ${translatorId === translator.id ? 'active' : ''}`}
-              onClick={e => {
-                e.preventDefault();
-                onClickOnTranslator(translator.id)
-              }}
-            >
-              {translator.title}
-            </button>
-          ))}
-        </nav>
-      )}
-    </>
+    <List translators={translators} translatorId={translatorId} onClickOnTranslator={onClickOnTranslator} />
   )
 }
 

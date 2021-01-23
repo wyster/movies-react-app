@@ -5,12 +5,14 @@ import Serial from './Serial'
 import { Link } from 'react-router-dom'
 import { useLazyQuery } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
+import Film from './Film'
 
 const GET_MOVIE_DETAILS = gql`
   query MovieDetails($id: Number) {
     details(id: $id) @rest(type: "MovieDetails", path: "details?id={args.id}") {
       isSerial,
-      name
+      name,
+      translators
     }
   }
 `
@@ -128,6 +130,18 @@ function Main () {
           translatorId={query.translator}
           episodeId={query.episode}
           seasonId={query.season}
+          quality={query.quality}
+          onUpdateState={onUpdateState}
+          playerTime={query.time}
+          playerVolume={query.volume}
+          playerAutoPlay={query.autoPlay}
+        />
+      )}
+      {movieInfo && !movieInfo.isSerial && (
+        <Film
+          filmId={movieId}
+          translatorId={query.translator}
+          translators={movieInfo.translators}
           quality={query.quality}
           onUpdateState={onUpdateState}
           playerTime={query.time}
