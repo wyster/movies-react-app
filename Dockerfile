@@ -8,6 +8,7 @@ COPY . /app
 WORKDIR /app
 
 RUN yarn install --production --frozen-lockfile
+RUN npx browserslist@latest --update-db
 RUN yarn build
 RUN yarn build:ssr
 
