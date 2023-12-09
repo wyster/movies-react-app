@@ -31,22 +31,22 @@ jobs:
       - name: Install packages
         env:
           CI: true
-        run: yarn install --frozen-lockfile
+        run: npm install
 
       - name: Run tests
         env:
           CI: true
-        run: yarn test
+        run: rpm run test
 
       - name: Build frontend
         env:
           CI: true
-        run: yarn build
+        run: rpm run build
 
       - name: Build SSR
         env:
           CI: true
-        run: yarn build:ssr
+        run: rpm run build:ssr
 
   prepare_publish:
     needs: build
