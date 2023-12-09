@@ -7,7 +7,7 @@ ENV REACT_APP_API_URL=${APP_API_URL}
 COPY . /app
 WORKDIR /app
 
-RUN yarn install --production --frozen-lockfile
+RUN npm install --production
 RUN npx browserslist@latest --update-db
 RUN yarn build
 RUN yarn build:ssr
