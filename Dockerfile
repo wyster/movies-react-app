@@ -12,6 +12,6 @@ RUN npx browserslist@latest --update-db
 RUN yarn build
 RUN yarn build:ssr
 
-CMD ["yarn", "start"]
+CMD ["npm", "start"]
 
 EXPOSE 80
