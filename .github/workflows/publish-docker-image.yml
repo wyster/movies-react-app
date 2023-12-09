@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: c-hive/gha-yarn-cache@v1
+      - uses: c-hive/gha-npm-cache@v1
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
@@ -22,11 +22,6 @@ jobs:
           node-version: ${{ matrix.node-version }}
         env:
           CI: true
-
-      - uses: actions/cache@v2
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-node-packages-${{ hashFiles('**/yarn.lock') }}
 
       - name: Install packages
         env:
