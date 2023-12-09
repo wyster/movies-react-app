@@ -36,6 +36,10 @@ function Player ({
     onEnded(parseInt(e.target.currentTime, 10))
   }
 
+  function requestFullScreen()  {
+    player.requestFullscreen();
+  }
+
   useEffect(() => {
     const $video = videoElement.current
 
@@ -93,6 +97,16 @@ function Player ({
 
   return (
     <>
+      <button
+        type="button"
+        className={`btn`}
+        onClick={e => {
+          e.preventDefault();
+          requestFullScreen()
+        }}
+      >
+        Fullscreen
+      </button>
       <div ref={videoContainer} data-vjs-player>
         <video
           ref={videoElement}
