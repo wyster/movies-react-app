@@ -36,17 +36,17 @@ jobs:
       - name: Run tests
         env:
           CI: true
-        run: rpm run test
+        run: npm run test
 
       - name: Build frontend
         env:
           CI: true
-        run: rpm run build
+        run: npm run build
 
       - name: Build SSR
         env:
           CI: true
-        run: rpm run build:ssr
+        run: npm run build:ssr
 
   prepare_publish:
     needs: build
