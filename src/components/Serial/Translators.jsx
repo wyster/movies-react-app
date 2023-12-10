@@ -4,7 +4,7 @@ import { default as List} from '../Translators'
 
 const GET_MOVIE_TRANSLATORS = gql`
   query MovieTranslators($id: Number) {
-    movie(id: $id) @rest(type: "MovieTranslators", path: "movie/{args.id}") {
+    details(id: $id) @rest(type: "MovieDetails", path: "details?id={args.id}") {
       translators {
         id,
         title
@@ -28,7 +28,7 @@ function Translators ({ serialId, translatorId, onClickOnTranslator }) {
     return `Error! ${error}`
   }
 
-  const { translators } = data.movie;
+  const { translators } = data.details;
 
   return (
     <List translators={translators} translatorId={translatorId} onClickOnTranslator={onClickOnTranslator} />

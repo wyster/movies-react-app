@@ -4,11 +4,12 @@ import QualityChoices from './Video/QualityChoices'
 import Player from './Video/Player'
 import gql from 'graphql-tag'
 import { useLazyQuery } from '@apollo/react-hooks'
+import {prepareUri} from "../utils/UriHelper";
 
 const GET_PLAYER = gql`
   query MoviePlayer($filmId: Number, $translatorId: Number) {
     data(filmId: $filmId, translatorId: $translatorId) @rest(type: "MoviePlayer", path: "movie/player?id={args.filmId}&translator_id={args.translatorId}") {
-      uri
+      url
     }
   }
 `
@@ -29,7 +30,7 @@ function Film ({
     if (!playerData) {
       return;
     }
-    setVideos(playerData.data.uri);
+    setVideos(prepareUri(playerData.data.url));
   }, [playerData])
 
   useEffect(() => {

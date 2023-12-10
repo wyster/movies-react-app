@@ -6,6 +6,7 @@ import QualityChoices from './Video/QualityChoices'
 import Player from './Video/Player'
 import gql from 'graphql-tag'
 import { useLazyQuery } from '@apollo/react-hooks'
+import {prepareUri} from "../utils/UriHelper";
 
 const GET_SERIAL_DATA = gql`
   query SerialData($serialId: Number, $translatorId: Number) {
@@ -19,7 +20,7 @@ const GET_SERIAL_DATA = gql`
 const GET_PLAYER = gql`
   query MoviePlayer($serialId: Number, $translatorId: Number, $episodeId: Number, $seasonId: Number) {
     data(serialId: $serialId, translatorId: $translatorId, episodeId: $episodeId, seasonId: $seasonId) @rest(type: "MoviePlayer", path: "serial/player?id={args.serialId}&translator_id={args.translatorId}&episode={args.episodeId}&season={args.seasonId}") {
-      uri
+      url
     }
   }
 `
@@ -50,7 +51,7 @@ function Serial ({
     if (!playerData) {
       return;
     }
-    setVideos(playerData.data.uri);
+    setVideos(prepareUri(playerData.data.url));
   }, [playerData])
 
   useEffect(() => {
