@@ -5,8 +5,8 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './bootstrap.scss';
 
-if (!process.env.REACT_APP_API_URL) {
-  throw new Error('process.env.REACT_APP_API_URL not defined!');
+if (!window.REACT_APP_API_URL) {
+  throw new Error('window.REACT_APP_API_URL not defined!');
 }
 
 ReactDOM.render(

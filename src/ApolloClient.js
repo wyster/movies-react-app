@@ -2,7 +2,7 @@ import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { RestLink } from 'apollo-link-rest';
 
 const restLink = new RestLink({
-  uri: `${process.env.REACT_APP_API_URL}/`
+  uri: `${window.REACT_APP_API_URL}/`
 });
 
 const client = new ApolloClient({
