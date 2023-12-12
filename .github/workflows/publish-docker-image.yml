@@ -142,5 +142,4 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_REPOSITORY }}:movies-react-app-${{ needs.prepare_publish.outputs.tag }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
-          build-args: |
-            APP_API_URL=${{ secrets.APP_API_URL }}
+          platforms: linux/arm64
