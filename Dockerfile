@@ -7,7 +7,7 @@ ENV REACT_APP_API_URL=${APP_API_URL}
 COPY . /app
 WORKDIR /app
 
-RUN npm install --production
+RUN npm install
 RUN npx update-browserslist-db@latest
 RUN yarn build
 RUN yarn build:ssr
