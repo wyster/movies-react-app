@@ -8,7 +8,7 @@ COPY . /app
 WORKDIR /app
 
 RUN npm install --production
-RUN npx browserslist@latest --update-db
+RUN npx update-browserslist-db@latest
 RUN yarn build
 RUN yarn build:ssr
 
