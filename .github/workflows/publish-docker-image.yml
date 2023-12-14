@@ -27,7 +27,7 @@ jobs:
       - name: Install packages
         env:
           CI: true
-        run: npm install
+        run: npx update-browserslist-db@latest && npm install
 
       #- name: Run tests
       #  env:
