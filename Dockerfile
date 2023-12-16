@@ -9,7 +9,7 @@ WORKDIR /app
 
 RUN npm install
 RUN npx update-browserslist-db@latest
-RUN yarn build
+RUN npm run build
 
 CMD ["npm", "start"]
 
