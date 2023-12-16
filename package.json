@@ -30,7 +30,6 @@
     "sass": "^1.69.5",
     "video.js": "^7.21.5",
     "videojs-hotkeys": "^0.2.28",
-    "web-vitals": "^0.2.4",
     "webpack-cli": "^5",
     "webpack-node-externals": "^2.5.2",
     "yup": "^0.32.0"
