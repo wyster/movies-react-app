@@ -55,7 +55,7 @@ jobs:
       tag: ${{ steps.tag.outputs.result }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - id: branch
         run: echo ::set-output name=result::${GITHUB_REF#refs/heads/}
       - uses: actions/github-script@v3

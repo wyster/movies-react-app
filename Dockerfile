@@ -7,7 +7,7 @@ ENV REACT_APP_API_URL=${APP_API_URL}
 COPY . /app
 WORKDIR /app
 
-RUN npm install
+RUN npm ci
 RUN npx update-browserslist-db@latest
 RUN npm run build
 
