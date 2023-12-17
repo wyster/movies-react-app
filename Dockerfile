@@ -7,10 +7,10 @@ ENV REACT_APP_API_URL=${APP_API_URL}
 COPY . /app
 WORKDIR /app
 
-RUN npm ci
+RUN yarn
 RUN npx update-browserslist-db@latest
-RUN npm run build
+RUN yarn build
 
-CMD ["npm", "start"]
+CMD ["yarn", "start"]
 
 EXPOSE 80
