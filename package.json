@@ -16,6 +16,7 @@
     "babel-loader": "^9",
     "bootstrap": "^5.3.2",
     "bootswatch": "^4.6.2",
+    "core-js": "3",
     "express": "^4.18.2",
     "express-promise-router": "^4.0.1",
     "graphql": "^15.4.0",
@@ -53,15 +54,10 @@
   },
   "browserslist": {
     "production": [
-      ">0.2%",
-      "Chrome 38",
-      "not dead",
-      "not op_mini all"
+      "Chrome 38"
     ],
     "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
+      "Chrome 38"
     ]
   },
   "devDependencies": {
