@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import video from 'video.js';
 import 'video.js/dist/video-js.css';
 import 'videojs-hotkeys';
+import { useVideoJS } from "react-hook-videojs";
 
 function Player ({
   src,
@@ -15,7 +16,10 @@ function Player ({
   const videoElement = useRef()
   const videoContainer = useRef()
   const [timer, setTimer] = useState(null)
-  const [player, setPlayer] = useState(null);
+
+  const { Video, player, ready } = useVideoJS(
+    { sources: [{ src: src }] },
+  );
 
   function timeUpdate (e) {
     const value = parseInt(e.target.currentTime, 10)
@@ -41,40 +45,22 @@ function Player ({
   }
 
   useEffect(() => {
-    const $video = videoElement.current
-
-    const player = video($video, {
-      fluid: true
-    });
-
-    player.ready(function() {
-      this.hotkeys();
-    })
-
-    setPlayer(player);
-
-    return () => {
-      player.dispose();
-    }
-
-  }, [])
-
-  useEffect(() => {
     if (!player) {
       return;
     }
-
-    player.src({type: 'video/mp4', src});
 
     if (autoPlay) {
       player.play();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [src, player])
+  }, [player])
 
   useEffect(() => {
     if (!videoElement.current || !videoElement.current.paused) {
       return
+    }
+    if (!currentTime) {
+      return;
     }
     videoElement.current.currentTime = currentTime
   }, [currentTime])
@@ -107,8 +93,8 @@ function Player ({
       >
         Fullscreen
       </button>
-      <div ref={videoContainer} data-vjs-player>
-        <video
+      <div ref={videoContainer}>
+        <Video
           ref={videoElement}
           className="video-js"
           controls

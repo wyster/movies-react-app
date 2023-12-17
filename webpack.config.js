@@ -1,10 +1,7 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CopyPlugin = require("copy-webpack-plugin");
-
-const transpileDependencies = [
-  '@apollo'
-]
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
   entry: "./src/index.js",
@@ -24,27 +21,29 @@ module.exports = {
         include: [
           path.resolve('src'),
         ],
-        use: {
-          loader: "babel-loader",
-          options:{
-            presets: [
-              [
-                "@babel/preset-env",
-                {
-                  useBuiltIns: 'usage',
-                  "corejs": 3,
-                  debug: true,
-                }
+        use: [
+          {
+            loader: "babel-loader",
+            options: {
+              presets: [
+                [
+                  "@babel/preset-env",
+                  {
+                    useBuiltIns: 'usage',
+                    "corejs": 3,
+                  }
+                ],
+                [
+                  "@babel/preset-react",
+                  {
+                    "runtime": "automatic"
+                  }
+                ]
               ],
-              [
-                "@babel/preset-react",
-                {
-                  "runtime": "automatic"
-                }
-              ]
-            ],
-          }
-        },
+            }
+          },
+          'astroturf/loader'
+        ]
       },
       {
         test: /\.(js)$/,
@@ -53,6 +52,8 @@ module.exports = {
           path.resolve('node_modules/@sentry'),
           path.resolve('node_modules/yup'),
           path.resolve('node_modules/react'),
+          path.resolve('node_modules/video.js'),
+          path.resolve('node_modules/dequal')
         ],
         use: {
           loader: "babel-loader",
@@ -63,7 +64,6 @@ module.exports = {
                 {
                   useBuiltIns: 'usage',
                   "corejs": 3,
-                  debug: true,
                   modules: "cjs"
                 }
               ],
@@ -94,7 +94,6 @@ module.exports = {
                 {
                   useBuiltIns: 'usage',
                   "corejs": 3,
-                  debug: true,
                 }
               ]
             ]
@@ -104,15 +103,17 @@ module.exports = {
       {
         test: /\.css$/i,
         use: [
-          "style-loader",
+          MiniCssExtractPlugin.loader,
           "css-loader",
+          "postcss-loader"
         ],
       },
       {
         test: /\.s[ac]ss$/i,
         use: [
-          "style-loader",
+          MiniCssExtractPlugin.loader,
           "css-loader",
+          "postcss-loader",
           "sass-loader",
         ],
       },
@@ -130,5 +131,6 @@ module.exports = {
         }
       ],
     }),
+    new MiniCssExtractPlugin()
   ]
 };
