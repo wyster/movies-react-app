@@ -54,6 +54,7 @@
   "browserslist": {
     "production": [
       ">0.2%",
+      "Chrome 38",
       "not dead",
       "not op_mini all"
     ],
