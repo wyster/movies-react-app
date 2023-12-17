@@ -54,10 +54,10 @@
   },
   "browserslist": {
     "production": [
-      "Chrome 38"
+      "Chrome 30"
     ],
     "development": [
-      "Chrome 38"
+      "Chrome 30"
     ]
   },
   "devDependencies": {
