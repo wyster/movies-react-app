@@ -20,29 +20,29 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+          cache: 'yarn'
         env:
           CI: true
 
       - name: Install packages
         env:
           CI: true
-        run: npx update-browserslist-db@latest && npm install
+        run: npx update-browserslist-db@latest && yarn install
 
       #- name: Run tests
       #  env:
       #    CI: true
-      #  run: npm run test
+      #  run: yarn test
 
       - name: Build frontend
         env:
           CI: true
-        run: npm run build
+        run: yarn build
 
       - name: Build SSR
         env:
           CI: true
-        run: npm run build:ssr
+        run: yarn build:ssr
 
   prepare_publish:
     needs: build
