@@ -5,10 +5,6 @@ import App from './App';
 import './bootstrap.scss';
 import * as Sentry from "@sentry/react";
 
-if (!window.REACT_APP_API_URL) {
-  throw new Error('window.REACT_APP_API_URL not defined!');
-}
-
 if (window.SENTRY_DSN) {
   Sentry.init({
     dsn: window.SENTRY_DSN,
@@ -27,6 +23,10 @@ if (window.SENTRY_DSN) {
   });
 
   Sentry.captureMessage('test');
+}
+
+if (!window.REACT_APP_API_URL) {
+  throw new Error('window.REACT_APP_API_URL not defined!');
 }
 
 ReactDOM.render(
