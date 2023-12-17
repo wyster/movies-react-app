@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {createRoot} from 'react-dom';
 import './index.css';
 import App from './App';
 import './bootstrap.scss';
@@ -29,9 +29,14 @@ if (!window.REACT_APP_API_URL) {
   throw new Error('window.REACT_APP_API_URL not defined!');
 }
 
-ReactDOM.render(
+const container =  document.getElementById('root');
+if (!container) {
+  throw new Error('container not found');
+}
+const root = createRoot(container);
+
+root.render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+  </React.StrictMode>
 );
