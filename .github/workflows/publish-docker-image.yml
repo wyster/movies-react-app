@@ -84,6 +84,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v4
+
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: build
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -97,13 +104,6 @@ jobs:
           key: ${{ runner.os }}-buildx-main-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-buildx-main-
-
-      - uses: actions/checkout@v4
-
-      - name: Download artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: build
 
       - name: Login to DockerHub
         uses: docker/login-action@v3
