@@ -39,10 +39,10 @@ jobs:
           CI: true
         run: yarn build
 
-      - name: Build SSR
-        env:
-          CI: true
-        run: yarn build:ssr
+#      - name: Build SSR
+#        env:
+#          CI: true
+#        run: yarn build:ssr
 
   prepare_publish:
     needs: build
