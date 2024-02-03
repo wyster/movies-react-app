@@ -15,7 +15,7 @@
     <script src="<%= webpackConfig.output.publicPath %>env-config.js"></script>
     <script>
       window['__onGCastApiAvailable'] = function(isAvailable) {
-        console.log('available: ' + isAvailable);
+        console.log('available: ' + isAvailable, window.cast);
       };
     </script>
     <script type="text/javascript" src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
