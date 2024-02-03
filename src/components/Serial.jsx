@@ -208,6 +208,7 @@ function Serial ({
           {quality && (
             <div className="mt-1">
               <Player
+                movieId={serialId}
                 src={getVideoSrc(quality)}
                 currentTime={playerTime}
                 volume={playerVolume}

@@ -4,8 +4,21 @@ import 'video.js/dist/video-js.css';
 import 'videojs-hotkeys';
 import { useVideoJS } from "react-hook-videojs";
 import Cast from '../../utils/Cast';
+import gql from "graphql-tag";
+import {useQuery} from "@apollo/react-hooks";
+
+const GET_MOVIE_DETAILS = gql`
+  query MovieDetails($id: Number) {
+    movie(id: $id) @rest(type: "MovieDetails", path: "details?id={args.id}") {
+      name,
+      description,
+      poster
+    }
+  }
+`
 
 function Player ({
+  movieId,
   src,
   currentTime = null,
   volume = null,
@@ -17,6 +30,7 @@ function Player ({
   const videoElement = useRef()
   const videoContainer = useRef()
   const [timer, setTimer] = useState(null)
+  const { loading, error, data: movieData } = useQuery(GET_MOVIE_DETAILS, { variables: { id: movieId } })
 
   const { Video, player, ready } = useVideoJS(
     { sources: [{ src: src }] },
@@ -46,7 +60,11 @@ function Player ({
   }
 
   function cast()  {
-    new Cast().cast(src);
+    new Cast().cast(src, {
+      poster : movieData?.poster,
+      title : movieData?.name,
+      description: movieData?.description,
+    });
   }
 
   useEffect(() => {

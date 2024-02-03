@@ -5,7 +5,10 @@ import gql from 'graphql-tag'
 const GET_MOVIE_DETAILS = gql`
   query MovieDetails($id: Number) {
     movie(id: $id) @rest(type: "MovieDetails", path: "details?id={args.id}") {
-      isSerial
+      isSerial,
+      name,
+      description,
+      poster
     }
   }
 `
