@@ -60,7 +60,9 @@ function Player ({
   }
 
   function cast()  {
-    new Cast().cast(src, {
+    new Cast({
+      joinpolicy: 'page_scoped',
+    }).cast(src, {
       poster : movieData?.poster,
       title : movieData?.name,
       description: movieData?.description,
