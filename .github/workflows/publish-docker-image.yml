@@ -48,10 +48,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: build
-          path: build/
-
-      - name: Display structure of downloaded files
-        run: ls -la
+          path: build
 
   prepare_publish:
     needs: build
@@ -93,9 +90,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: build
-
-      - name: Display structure of downloaded files
-        run: ls -la
+          path: build
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
