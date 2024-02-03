@@ -60,9 +60,13 @@ function Player ({
   }
 
   function cast()  {
-    new Cast({
+    const cast = new Cast({
       joinpolicy: 'page_scoped',
-    }).cast(src, {
+    });
+    if (!cast.available) {
+      throw 'cast not available';
+    }
+    cast.cast(src, {
       poster : movieData?.poster,
       title : movieData?.name,
       description: movieData?.description,

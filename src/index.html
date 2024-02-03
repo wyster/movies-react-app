@@ -13,6 +13,11 @@
     <link rel="apple-touch-icon" href="<%= webpackConfig.output.publicPath %>logo192.png" />
     <link rel="manifest" href="<%= webpackConfig.output.publicPath %>manifest.json" />
     <script src="<%= webpackConfig.output.publicPath %>env-config.js"></script>
+    <script>
+      window['__onGCastApiAvailable'] = function(isAvailable) {
+        console.log('available: ' + isAvailable);
+      };
+    </script>
     <script type="text/javascript" src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
     <title>React App</title>
   </head>
