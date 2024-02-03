@@ -27,78 +27,16 @@ module.exports = {
             options: {
               presets: [
                 [
-                  "@babel/preset-env",
-                  {
-                    useBuiltIns: 'usage',
-                    "corejs": 3,
-                  }
+                  "@babel/preset-env"
                 ],
                 [
-                  "@babel/preset-react",
-                  {
-                    "runtime": "automatic"
-                  }
+                  "@babel/preset-react"
                 ]
               ],
             }
           },
           'astroturf/loader'
         ]
-      },
-      {
-        test: /\.(js)$/,
-        include: [
-          path.resolve('node_modules/apollo-link-rest'),
-          path.resolve('node_modules/@sentry'),
-          path.resolve('node_modules/yup'),
-          path.resolve('node_modules/react'),
-          path.resolve('node_modules/video.js'),
-          path.resolve('node_modules/dequal')
-        ],
-        use: {
-          loader: "babel-loader",
-          options:{
-            presets: [
-              [
-                "@babel/preset-env",
-                {
-                  useBuiltIns: 'usage',
-                  "corejs": 3,
-                  modules: "cjs"
-                }
-              ],
-              [
-                "@babel/preset-react",
-                {
-                  "runtime": "automatic"
-                }
-              ]
-            ],
-          }
-        },
-      },
-      {
-        test: /\.(js|mjs)$/,
-        include: [
-          path.resolve('node_modules/@apollo'),
-          path.resolve('node_modules/optimism'),
-          path.resolve('node_modules/@wry'),
-          path.resolve('node_modules/ts'),
-        ],
-        use: {
-          loader: "babel-loader",
-          options:{
-            presets: [
-              [
-                "@babel/preset-env",
-                {
-                  useBuiltIns: 'usage',
-                  "corejs": 3,
-                }
-              ]
-            ]
-          }
-        },
       },
       {
         test: /\.css$/i,
