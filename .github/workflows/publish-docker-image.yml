@@ -44,6 +44,12 @@ jobs:
 #          CI: true
 #        run: yarn build:ssr
 
+      - name: Upload build as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: build
+
   prepare_publish:
     needs: build
     name: Prepare Publish
@@ -91,6 +97,11 @@ jobs:
           key: ${{ runner.os }}-buildx-main-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-buildx-main-
+
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: build
 
       - name: Login to DockerHub
         uses: docker/login-action@v3
