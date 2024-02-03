@@ -98,6 +98,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-buildx-main-
 
+      - uses: actions/checkout@v4
+
       - name: Download artifact
         uses: actions/download-artifact@v2
         with:
@@ -116,14 +118,6 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_REPOSITORY }}:movies-react-app-latest
           platforms: linux/arm64
-          cache-from: type=local,src=/tmp/.buildx-main-cache
-          cache-to: type=local,mode=max,dest=/tmp/.buildx-main-cache
-
-      - name: Push latest to Docker Hub 2
-        uses: docker/build-push-action@v5
-        with:
-          push: true
-          tags: ${{ secrets.DOCKERHUB_REPOSITORY }}:movies-react-app-latest2
           cache-from: type=local,src=/tmp/.buildx-main-cache
           cache-to: type=local,mode=max,dest=/tmp/.buildx-main-cache
 
