@@ -7,8 +7,7 @@ ENV REACT_APP_API_URL=${APP_API_URL}
 COPY . /app
 WORKDIR /app
 
-RUN ls -la /app
-RUN ls -la /app/build
+RUN yarn install --production
 
 CMD ["yarn", "start"]
 

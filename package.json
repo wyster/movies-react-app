@@ -6,6 +6,24 @@
     "node": ">=20"
   },
   "dependencies": {
+    "express": "^4.18.2",
+    "express-promise-router": "^4.0.1"
+  },
+  "scripts": {
+    "start": "node ./bin/start.js",
+    "start:dev": "npx webpack build --mode=development --progress --watch",
+    "build": "npx webpack build --progress",
+    "build:ssr": "webpack -c ssr/webpack.config.js",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "devDependencies": {
     "@apollo/client": "^3.8.8",
     "@apollo/react-hooks": "^4.0.0",
     "@babel/core": "^7.23.6",
@@ -24,8 +42,6 @@
     "bootstrap": "^5.3.2",
     "bootswatch": "^4.6.2",
     "core-js": "3",
-    "express": "^4.18.2",
-    "express-promise-router": "^4.0.1",
     "graphql": "^15.4.0",
     "graphql-anywhere": "^4.2.8",
     "graphql-tag": "^2.11.0",
@@ -44,31 +60,7 @@
     "webpack": "^5.89.0",
     "webpack-cli": "^5",
     "whatwg-fetch": "^3.6.20",
-    "yup": "^0.32.0"
-  },
-  "scripts": {
-    "start": "node ./bin/start.js",
-    "start:dev": "npx webpack build --mode=development --progress --watch",
-    "build": "npx webpack build --progress",
-    "build:ssr": "webpack -c ssr/webpack.config.js",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      "Chrome 30"
-    ],
-    "development": [
-      "Chrome 30"
-    ]
-  },
-  "devDependencies": {
+    "yup": "^0.32.0",
     "@babel/plugin-transform-runtime": "^7.23.6",
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.8.1",
