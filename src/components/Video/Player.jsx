@@ -3,6 +3,7 @@ import video from 'video.js';
 import 'video.js/dist/video-js.css';
 import 'videojs-hotkeys';
 import { useVideoJS } from "react-hook-videojs";
+import Cast from '../../utils/Cast';
 
 function Player ({
   src,
@@ -42,6 +43,10 @@ function Player ({
 
   function requestFullScreen()  {
     player.requestFullscreen();
+  }
+
+  function cast()  {
+    new Cast().cast(src);
   }
 
   useEffect(() => {
@@ -92,6 +97,16 @@ function Player ({
         }}
       >
         Fullscreen
+      </button>
+      <button
+        type="button"
+        className={`btn`}
+        onClick={e => {
+          e.preventDefault();
+          cast()
+        }}
+      >
+        Cast
       </button>
       <div ref={videoContainer}>
         <Video
