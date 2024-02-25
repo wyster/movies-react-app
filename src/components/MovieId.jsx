@@ -15,7 +15,7 @@ function MovieId ({ onChangeMovieId }) {
   const [movieUrl, setMovieUrl] = useState('')
 
   useEffect(() => {
-    if (!data) {
+    if (!data || !movieUrl) {
       return
     }
     const { id }  = data.movie
@@ -42,12 +42,13 @@ function MovieId ({ onChangeMovieId }) {
   function onChange (value) {
     if (!value) {
       window.history.pushState({}, document.title, window.location.pathname)
+      onChangeMovieId(null);
     } else {
       const searchParams = new URLSearchParams(window.location.search)
       searchParams.set('movieUrl', value)
       window.history.pushState({}, document.title, `?${searchParams.toString()}`)
+      load({ variables: { url: value } })
     }
-    load({ variables: { url: value } })
     setMovieUrl(value)
   }
 

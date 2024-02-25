@@ -82,7 +82,7 @@ function Film ({
                 onClickOnQuality={onClickOnQuality}
               />
             </div>
-            {quality && (
+            {filmId && quality && (
               <div className="mt-1">
                 <Player
                   movieId={filmId}

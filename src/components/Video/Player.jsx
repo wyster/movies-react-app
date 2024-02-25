@@ -30,6 +30,7 @@ function Player ({
   const videoElement = useRef()
   const videoContainer = useRef()
   const [timer, setTimer] = useState(null)
+  const [myCast, setMyCast] = useState(null)
   const { loading, error, data: movieData } = useQuery(GET_MOVIE_DETAILS, { variables: { id: movieId } })
 
   const { Video, player, ready } = useVideoJS(
@@ -60,17 +61,32 @@ function Player ({
   }
 
   function cast()  {
-    const cast = new Cast({
-      joinpolicy: 'page_scoped',
-    });
-    if (!cast.available) {
-      throw 'cast not available';
+    if (myCast) {
+      if (myCast.src === src) {
+        myCast.play();
+        return;
+      }
+      myCast.cast(src, {
+        poster : movieData?.movie?.poster,
+        title : movieData?.movie?.name,
+        description: movieData?.movie?.description,
+      });
     }
-    cast.cast(src, {
-      poster : movieData?.poster,
-      title : movieData?.name,
-      description: movieData?.description,
-    });
+
+    const cast = new Cast({
+        joinpolicy: 'page_scoped',
+      });
+      cast.on('event', (e) => console.log(e));  // Catch all events except 'error'
+      cast.on('error', (e) => console.log(e));  // Catch any errors
+      if (!cast.available) {
+        throw 'cast not available';
+      }
+      cast.cast(src, {
+        poster : movieData?.movie?.poster,
+        title : movieData?.movie?.name,
+        description: movieData?.movie?.description,
+      });
+      setMyCast(cast);
   }
 
   useEffect(() => {

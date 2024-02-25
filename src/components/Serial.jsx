@@ -205,7 +205,7 @@ function Serial ({
               onClickOnQuality={onClickOnQuality}
             />
           </div>
-          {quality && (
+          {serialId && quality && (
             <div className="mt-1">
               <Player
                 movieId={serialId}
