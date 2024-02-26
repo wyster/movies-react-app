@@ -76,7 +76,13 @@ function Player ({
     const cast = new Cast({
         joinpolicy: 'page_scoped',
       });
-      cast.on('event', (e) => console.log(e));  // Catch all events except 'error'
+      cast.on('event', (e) => {
+        if (e === 'disconnect') {
+          setTimer(myCast.time);
+          setMyCast(null);
+        }
+        console.log(e)
+      });  // Catch all events except 'error'
       cast.on('error', (e) => console.log(e));  // Catch any errors
       if (!cast.available) {
         throw 'cast not available';
@@ -88,6 +94,10 @@ function Player ({
       });
       setMyCast(cast);
   }
+
+  useEffect(() => {
+    setTimer(0);
+  }, [movieId])
 
   useEffect(() => {
     if (!player) {
