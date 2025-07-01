@@ -23,6 +23,6 @@ yarn-debug.log*
 yarn-error.log*
 
 .eslintcache
-.env.local
 public/env-config.js
-docker-compose.ovveride.yml
+docker-compose.override.yml
+.idea
