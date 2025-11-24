@@ -68,5 +68,6 @@
     "webpack-cli": "^5",
     "whatwg-fetch": "^3.6.20",
     "yup": "^0.32.0"
-  }
+  },
+  "packageManager": "yarn@4.12.0"
 }
