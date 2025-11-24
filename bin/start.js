@@ -9,6 +9,7 @@ const buildDir = path.join(__dirname, '/../build')
 const app = new Express()
 app.use(router)
 router.use('/', Express.static(buildDir))
+router.use('/movie/:id', Express.static(buildDir))
 
 const port = process.env.PORT || 80
 app.listen(port, () => console.log(`app Server is now running on http://localhost:${port}`))

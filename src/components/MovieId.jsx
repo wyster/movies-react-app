@@ -18,6 +18,9 @@ function MovieId ({ onChangeMovieId }) {
     if (!data || !movieUrl) {
       return
     }
+    if (!data.movie) {
+      return;
+    }
     const { id }  = data.movie
     onChangeMovieId(id)
     // eslint-disable-next-line react-hooks/exhaustive-deps

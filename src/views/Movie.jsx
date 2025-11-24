@@ -1,11 +1,10 @@
 import MovieInfo from '../components/MovieInfo'
+import {useParams} from "react-router";
 
-function Movie ({ match }) {
-  if (!match.params.id) {
-    return 'Error';
-  }
+function Movie () {
+  const { id } = useParams();
   return (
-    <MovieInfo id={parseInt(match.params.id)}/>
+    <MovieInfo id={parseInt(id)} />
   )
 }
 

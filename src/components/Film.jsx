@@ -19,12 +19,22 @@ function Film ({
   translators,
   onUpdateState,
   playerTime = 0,
-  playerVolume = 100
+  playerVolume = 100,
+  translatorId: propTranslatorId,
+  quality: propQuality,
 }) {
   const [getPlayerData, { data: playerData }] = useLazyQuery(GET_PLAYER);
   const [translatorId, setTranslatorId] = useState(null)
   const [videos, setVideos] = useState([])
   const [quality, setQuality] = useState(null)
+
+  useEffect(() => {
+    setTranslatorId(propTranslatorId)
+  }, [propTranslatorId])
+
+  useEffect(() => {
+    setQuality(propQuality)
+  }, [propQuality])
 
   useEffect(() => {
     if (!playerData) {

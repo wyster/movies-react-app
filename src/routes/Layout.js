@@ -1,22 +1,17 @@
-import { Route, Switch } from 'react-router'
 import React from 'react'
+import { BrowserRouter, Routes, Route } from "react-router"
 
-import routes from './'
+import Main from '../views/Main'
+import Movie from "../views/Movie";
 
 const Layout = () =>
   <div className="container-fluid mt-3 mb-3">
-    <Switch>
-      {routes.map((route, i) => (
-        <Route
-          exact
-          key={route.path}
-          path={route.path}
-          render={props => (
-            <route.component {...props} />
-          )}
-        />
-      ))}
-    </Switch>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Main />} />
+        <Route path="/movie/:id" element={<Movie />} />
+      </Routes>
+    </BrowserRouter>
   </div>
 
 export default Layout
