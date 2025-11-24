@@ -24,10 +24,14 @@ jobs:
         env:
           CI: true
 
+      # Enable Corepack to use the correct Yarn version
+      - run: corepack enable
+      - run: corepack prepare yarn@4.12.0 --activate
+
       - name: Install packages
         env:
           CI: true
-        run: corepack enable && npx update-browserslist-db@latest && yarn install
+        run: npx update-browserslist-db@latest && yarn install
 
       #- name: Run tests
       #  env:
