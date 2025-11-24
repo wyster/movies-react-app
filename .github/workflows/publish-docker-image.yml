@@ -27,7 +27,7 @@ jobs:
       - name: Install packages
         env:
           CI: true
-        run: npx update-browserslist-db@latest && corepack enable && yarn install
+        run: corepack enable && npx update-browserslist-db@latest && yarn install
 
       #- name: Run tests
       #  env:
