@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client/react'
 import { default as List} from '../Translators'
 
 const GET_MOVIE_TRANSLATORS = gql`

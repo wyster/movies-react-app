@@ -5,7 +5,7 @@ import 'videojs-hotkeys';
 import { useVideoJS } from "react-hook-videojs";
 import Cast from '../../utils/Cast';
 import gql from "graphql-tag";
-import {useQuery} from "@apollo/react-hooks";
+import {useQuery} from "@apollo/client/react";
 
 const GET_MOVIE_DETAILS = gql`
   query MovieDetails($id: Number) {

@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useState} from 'react'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client/react'
 import gql from 'graphql-tag'
 import Serial from "./Serial";
 import Film from "./Film";
@@ -138,10 +138,6 @@ function MovieInfo ({ id }) {
           playerAutoPlay={query.autoPlay}
         />
       )}
-      {id && (
-        <Link to={`/movie/${id}`}>Movie info</Link>
-      )}
-      <p>Movie info</p>
       <ul>
         <li><b>Movie ID:</b> {id}</li>
         {Object.entries(movieInfo).map(([label, value]) => (

@@ -5,7 +5,7 @@ import Episodes from './Serial/Episodes'
 import QualityChoices from './Video/QualityChoices'
 import Player from './Video/Player'
 import gql from 'graphql-tag'
-import { useLazyQuery } from '@apollo/react-hooks'
+import { useLazyQuery } from '@apollo/client/react'
 import {prepareUri} from "../utils/UriHelper";
 
 const GET_SERIAL_DATA = gql`
