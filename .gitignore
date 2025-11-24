@@ -26,3 +26,4 @@ yarn-error.log*
 public/env-config.js
 docker-compose.override.yml
 .idea
+.yarn

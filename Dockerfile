@@ -7,7 +7,8 @@ ENV REACT_APP_API_URL=${APP_API_URL}
 COPY . /app
 WORKDIR /app
 
-RUN yarn install --production
+RUN corepack enable
+RUN yarn install
 
 CMD ["yarn", "start"]
 
