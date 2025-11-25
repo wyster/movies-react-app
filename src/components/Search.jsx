@@ -7,7 +7,8 @@ const SEARCH = gql`
   query Search($q: String) {
     search(q: $q) @rest(type: "Search", path: "search?q={args.q}") {
       name,
-      id
+      id,
+      year
     }
   }
 `
@@ -17,12 +18,15 @@ function Search () {
   const [query, setQuery] = useState('')
 
   useEffect(() => {
-    if (!query) {
-      return
-    }
-    load({ variables: { q: query } })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query])
+    const handler = setTimeout(() => {
+      if (query?.length >= 3) {
+        load({variables: {q: query}})
+      }
+    }, 500); // 500ms debounce
+
+    // Cleanup the timeout if value changes before 500ms
+    return () => clearTimeout(handler);
+  }, [query]);
 
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search)
@@ -64,7 +68,7 @@ function Search () {
         <ul className="list-group">
           {results.search.map(item => (
             <li className="list-group-item" key={item.id}>
-              <NavLink to={`/movie/${item.id}`}>{item.name}</NavLink>
+              <NavLink to={`/movie/${item.id}`}>{item.name} ({item.year})</NavLink>
             </li>
           ))}
         </ul>
