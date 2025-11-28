@@ -30,8 +30,8 @@ const indexFile = path.join(buildDir, '/index.html')
 const indexFileContent = fs.readFileSync(indexFile, { encoding: 'utf8', flag: 'r' })
 
 const app = express();
-app.use(express.static('build'))
-app.get('/*splat', async (req, res) => {
+app.use(express.static('build', {index: false}))
+app.get('/{*splat}', async (req, res) => {
   const restLink = new RestLink({
     uri: `${process.env.REACT_APP_API_URL}/`,
     customFetch: fetch
