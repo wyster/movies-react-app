@@ -3,19 +3,16 @@ import fs from 'fs'
 import fetch from 'isomorphic-fetch'
 import ReactDOMServer from 'react-dom/server'
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client'
-import Express from 'express'
+import express from 'express'
 import { StaticRouter } from 'react-router'
 import { renderToStringWithData } from '@apollo/client/react/ssr'
 import { RestLink } from 'apollo-link-rest'
-import Router from 'express-promise-router'
 
 import Layout from '../src/routes/Layout'
 
 if (!process.env.REACT_APP_API_URL) {
   throw new Error('process.env.REACT_APP_API_URL not defined!');
 }
-
-const router = Router()
 
 function Html ({ content, state }) {
   return (
@@ -32,10 +29,9 @@ const buildDir = path.join(__dirname, '/../build')
 const indexFile = path.join(buildDir, '/index.html')
 const indexFileContent = fs.readFileSync(indexFile, { encoding: 'utf8', flag: 'r' })
 
-const app = new Express()
-app.use(router)
-router.use('/static', Express.static(path.join(buildDir, '/static')))
-router.get('*', async (req, res) => {
+const app = express();
+app.use(express.static('build'))
+app.get('/*splat', async (req, res) => {
   const restLink = new RestLink({
     uri: `${process.env.REACT_APP_API_URL}/`,
     customFetch: fetch

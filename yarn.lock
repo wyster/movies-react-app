@@ -4064,23 +4064,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"express-promise-router@npm:^4.0.1":
-  version: 4.1.1
-  resolution: "express-promise-router@npm:4.1.1"
-  dependencies:
-    is-promise: "npm:^4.0.0"
-    lodash.flattendeep: "npm:^4.0.0"
-    methods: "npm:^1.0.0"
-  peerDependencies:
-    "@types/express": ^4.0.0
-    express: ^4.0.0
-  peerDependenciesMeta:
-    "@types/express":
-      optional: true
-  checksum: 10c0/18c358e0df6602c45611096e325cfc3777b3c7cdd24f3908d80cb922cacc23404dc0f6e6babf528853d57feecb15b19d27309ca301c3950cb5597e8a6f383499
-  languageName: node
-  linkType: hard
-
 "express@npm:^4.21.2":
   version: 4.21.2
   resolution: "express@npm:4.21.2"
@@ -5353,13 +5336,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash.flattendeep@npm:^4.0.0":
-  version: 4.4.0
-  resolution: "lodash.flattendeep@npm:4.4.0"
-  checksum: 10c0/83cb80754b921fb4ed2c222b91a82b2524f3bdc60c3ae91e00688bd4bf1bcc28b8a2cc250e11fdc1b6da3a2de09e57008e13f15a209cafdd4f9163d047f97544
-  languageName: node
-  linkType: hard
-
 "lodash@npm:^4.17.15, lodash@npm:^4.17.20, lodash@npm:^4.17.21":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
@@ -5532,7 +5508,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"methods@npm:^1.0.0, methods@npm:~1.1.2":
+"methods@npm:~1.1.2":
   version: 1.1.2
   resolution: "methods@npm:1.1.2"
   checksum: 10c0/bdf7cc72ff0a33e3eede03708c08983c4d7a173f91348b4b1e4f47d4cdbf734433ad971e7d1e8c77247d9e5cd8adb81ea4c67b0a2db526b758b2233d7814b8b2
@@ -5762,7 +5738,6 @@ __metadata:
     core-js: "npm:3"
     css-loader: "npm:^6.8.1"
     express: "npm:^5"
-    express-promise-router: "npm:^4.0.1"
     graphql: "npm:^16"
     graphql-anywhere: "npm:^4.2.8"
     graphql-tag: "npm:^2.11.0"
@@ -5786,6 +5761,7 @@ __metadata:
     webpack: "npm:^5.89.0"
     webpack-cli: "npm:^5"
     webpack-dev-server: "npm:^5.2.2"
+    webpack-node-externals: "npm:^3.0.0"
     whatwg-fetch: "npm:^3.6.20"
     yup: "npm:^0.32.0"
   languageName: unknown
@@ -8024,6 +8000,13 @@ __metadata:
     flat: "npm:^5.0.2"
     wildcard: "npm:^2.0.0"
   checksum: 10c0/b607c84cabaf74689f965420051a55a08722d897bdd6c29cb0b2263b451c090f962d41ecf8c9bf56b0ab3de56e65476ace0a8ecda4f4a4663684243d90e0512b
+  languageName: node
+  linkType: hard
+
+"webpack-node-externals@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "webpack-node-externals@npm:3.0.0"
+  checksum: 10c0/9f645a4dc8e122dac43cdc8c1367d4b44af20c79632438b633acc1b4fe64ea7ba1ad6ab61bd0fc46e1b873158c48d8c7a25a489cdab1f31299f00eb3b81cfc61
   languageName: node
   linkType: hard
 
