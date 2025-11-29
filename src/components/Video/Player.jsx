@@ -37,7 +37,14 @@ function Player ({
     { sources: [{ src: src }] },
   );
 
+  if (ready) {
+    player.currentTime(currentTime);
+  }
+
   function timeUpdate (e) {
+    if (!ready) {
+      return;
+    }
     const value = parseInt(e.target.currentTime, 10)
     setTimer(current => {
       if (value === current) {
@@ -88,7 +95,7 @@ function Player ({
       });  // Catch all events except 'error'
       cast.on('timeupdate', () => {
         console.log('timeupdate: ', cast.timePretty, 'duration: ', cast.durationPretty);
-        onCurrentTimeChange(cast.time);
+        setTimer(cast.time);
       })
       cast.on('error', (e) => console.log(e));  // Catch any errors
       cast.on('disconnect', (e) => {
@@ -108,10 +115,6 @@ function Player ({
       }
       setMyCast(cast);
   }
-
-  useEffect(() => {
-    setTimer(0);
-  }, [movieId])
 
   useEffect(() => {
     if (!player) {
@@ -172,6 +175,9 @@ function Player ({
       >
         Cast
       </button>
+      {currentTime > 0 && (
+        <span className="badge rounded-pill bg-secondary">Current time {currentTime} sec</span>
+      )}
       <div ref={videoContainer}>
         <Video
           ref={videoElement}
