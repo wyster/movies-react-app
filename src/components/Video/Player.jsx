@@ -103,6 +103,9 @@ function Player ({
         title : movieData?.movie?.name,
         description: movieData?.movie?.description,
       });
+      if (currentTime) {
+        cast.seek(currentTime);
+      }
       setMyCast(cast);
   }
 
