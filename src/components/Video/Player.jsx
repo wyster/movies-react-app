@@ -42,7 +42,7 @@ function Player ({
   }
 
   function timeUpdate (e) {
-    if (!ready) {
+    if (!ready || myCast?.state === 'playing') {
       return;
     }
     const value = parseInt(e.target.currentTime, 10)
@@ -73,47 +73,58 @@ function Player ({
         myCast.play();
         return;
       }
+      if (currentTime) {
+        myCast.seek(currentTime);
+      }
       myCast.cast(src, {
         poster : movieData?.movie?.poster,
         title : movieData?.movie?.name,
         description: movieData?.movie?.description,
       });
+      return;
     }
 
     const cast = new Cast({
-        joinpolicy: 'page_scoped',
-      });
-      cast.on('event', (e) => {
-        if (e === 'disconnect') {
-          setTimer(myCast.time);
-          setMyCast(null);
-        }
-        if (e === 'session_error') {
-          setMyCast(null);
-        }
-        console.log(e)
-      });  // Catch all events except 'error'
-      cast.on('timeupdate', () => {
-        console.log('timeupdate: ', cast.timePretty, 'duration: ', cast.durationPretty);
-        setTimer(cast.time);
-      })
-      cast.on('error', (e) => console.log(e));  // Catch any errors
-      cast.on('disconnect', (e) => {
-        console.log(e, 'disconnect')
+      joinpolicy: 'page_scoped',
+    });
+    if (currentTime) {
+      cast.seek(currentTime);
+    }
+    cast.on('event', (e) => {
+      if (e === 'disconnect') {
+        setTimer(myCast.time);
         setMyCast(null);
-      });
-      if (!cast.available) {
-        throw 'cast not available';
       }
-      cast.cast(src, {
-        poster : movieData?.movie?.poster,
-        title : movieData?.movie?.name,
-        description: movieData?.movie?.description,
-      });
-      if (currentTime) {
+      if (e === 'session_error') {
+        setMyCast(null);
+      }
+      console.log('event:', e, 'state:', cast.state)
+    });
+    cast.on('statechange', () => {
+      if (cast.state === 'playing') {
+        console.log('playing', currentTime);
         cast.seek(currentTime);
       }
-      setMyCast(cast);
+    })
+    // Catch all events except 'error'
+    cast.on('timeupdate', () => {
+      console.log('timeupdate:', cast.timePretty, 'duration:', cast.durationPretty);
+      setTimer(cast.time);
+    })
+    cast.on('error', (e) => console.log(e));  // Catch any errors
+    cast.on('disconnect', (e) => {
+      console.log(e, 'disconnect')
+      setMyCast(null);
+    });
+    if (!cast.available) {
+      throw 'cast not available';
+    }
+    cast.cast(src, {
+      poster : movieData?.movie?.poster,
+      title : movieData?.movie?.name,
+      description: movieData?.movie?.description,
+    });
+    setMyCast(cast);
   }
 
   useEffect(() => {
