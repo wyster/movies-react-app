@@ -87,6 +87,7 @@ function Player ({
         console.log(e)
       });  // Catch all events except 'error'
       cast.on('timeupdate', () => {
+        console.log('timeupdate: ', cast.timePretty, 'duration: ', cast.durationPretty);
         onCurrentTimeChange(cast.time);
       })
       cast.on('error', (e) => console.log(e));  // Catch any errors
