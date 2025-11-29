@@ -75,6 +75,10 @@ function Film ({
     return undefined
   }
 
+  function onCurrentTimeChange (time) {
+    onUpdateState({ time })
+  }
+
   return (
     <>
       <div className="mt-1">
@@ -99,6 +103,7 @@ function Film ({
                   src={getVideoSrc(quality)}
                   currentTime={playerTime}
                   volume={playerVolume}
+                  onCurrentTimeChange={onCurrentTimeChange}
                 />
               </div>
             )}
