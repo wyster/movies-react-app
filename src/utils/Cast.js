@@ -446,6 +446,7 @@ class Castjs {
     if (isPercentage) {
       seconds = this._controller.getSeekTime(seconds, this._player.duration);
     }
+    console.log(this._player, this._player.currentTime);
     this._player.currentTime = seconds;
     this._controller.seek();
     return this;

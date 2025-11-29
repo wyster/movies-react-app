@@ -87,12 +87,10 @@ function Player ({
     const cast = new Cast({
       joinpolicy: 'page_scoped',
     });
-    if (currentTime) {
-      cast.seek(currentTime);
-    }
+    // Catch all events except 'error'
     cast.on('event', (e) => {
       if (e === 'disconnect') {
-        setTimer(myCast.time);
+        setTimer(cast.time);
         setMyCast(null);
       }
       if (e === 'session_error') {
@@ -100,13 +98,6 @@ function Player ({
       }
       console.log('event:', e, 'state:', cast.state)
     });
-    cast.on('statechange', () => {
-      if (cast.state === 'playing') {
-        console.log('playing', currentTime);
-        cast.seek(currentTime);
-      }
-    })
-    // Catch all events except 'error'
     cast.on('timeupdate', () => {
       console.log('timeupdate:', cast.timePretty, 'duration:', cast.durationPretty);
       setTimer(cast.time);
@@ -119,6 +110,7 @@ function Player ({
     if (!cast.available) {
       throw 'cast not available';
     }
+    cast.time = currentTime;
     cast.cast(src, {
       poster : movieData?.movie?.poster,
       title : movieData?.movie?.name,
