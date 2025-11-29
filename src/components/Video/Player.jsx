@@ -61,7 +61,7 @@ function Player ({
   }
 
   function cast()  {
-    if (myCast) {
+    if (myCast && myCast.connected) {
       if (myCast.src === src) {
         myCast.play();
         return;
@@ -81,9 +81,16 @@ function Player ({
           setTimer(myCast.time);
           setMyCast(null);
         }
+        if (e === 'session_error') {
+          setMyCast(null);
+        }
         console.log(e)
       });  // Catch all events except 'error'
       cast.on('error', (e) => console.log(e));  // Catch any errors
+      cast.on('disconnect', (e) => {
+        console.log(e, 'disconnect')
+        setMyCast(null);
+      });
       if (!cast.available) {
         throw 'cast not available';
       }
