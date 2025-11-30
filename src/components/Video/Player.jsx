@@ -6,6 +6,7 @@ import { useVideoJS } from "react-hook-videojs";
 import Cast from '../../utils/Cast';
 import gql from "graphql-tag";
 import {useQuery} from "@apollo/client/react";
+import useCast from "../../hooks/cast";
 
 const GET_MOVIE_DETAILS = gql`
   query MovieDetails($id: Number) {
@@ -30,8 +31,7 @@ function Player ({
   const videoElement = useRef()
   const videoContainer = useRef()
   const [timer, setTimer] = useState(null)
-  const [paused, setPaused] = useState(false)
-  const [myCast, setMyCast] = useState(null)
+  const {myCast, setMyCast, paused, timer: myCastTimer} = useCast();
   const { loading, error, data: movieData } = useQuery(GET_MOVIE_DETAILS, { variables: { id: movieId } })
 
   const { Video, player, ready } = useVideoJS(
@@ -99,10 +99,6 @@ function Player ({
       }
       console.log('event:', e, 'state:', cast.state)
     });
-    cast.on('timeupdate', () => {
-      console.log('timeupdate:', cast.timePretty, 'duration:', cast.durationPretty);
-      setTimer(cast.time);
-    })
     cast.on('error', (e) => console.log(e));  // Catch any errors
     cast.on('disconnect', (e) => {
       console.log(e, 'disconnect')
@@ -157,6 +153,10 @@ function Player ({
     videoElement.current.volume = volume / 100
   }, [volume])
 
+  useEffect(() => {
+    setTimer(myCastTimer);
+  }, [myCastTimer]);
+
   function run() {
     const cast = new Cast({
       joinpolicy: 'origin_scoped',
@@ -172,26 +172,11 @@ function Player ({
       }
       console.log('event:', e, 'state:', cast.state)
     });
-    cast.on('timeupdate', () => {
-      console.log('timeupdate:', cast.timePretty, 'duration:', cast.durationPretty);
-      setTimer(cast.time);
-    })
     cast.on('error', (e) => console.log(e));  // Catch any errors
     cast.on('disconnect', (e) => {
       console.log(e, 'disconnect')
       setMyCast(null);
     });
-    cast.on('connect', () => {
-      cast._isMediaLoadedChanged().then(() => {
-        setPaused(cast.paused);
-      })
-    });
-    cast.on('pause', () => {
-      setPaused(true);
-    })
-    cast.on('playing', () => {
-      setPaused(false);
-    })
     setMyCast(cast);
   }
 
