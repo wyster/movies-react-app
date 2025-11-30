@@ -128,7 +128,7 @@ function Player ({
   }, [player])
 
   useEffect(() => {
-    if (!videoElement.current || !videoElement.current.paused) {
+    if (!videoElement.current || !videoElement.current.paused || myCast?.connected) {
       return
     }
     if (!currentTime) {
