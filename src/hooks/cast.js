@@ -11,7 +11,7 @@ function useCast () {
       return;
     }
 
-    function connect() {
+    function connect(cast) {
       cast._isMediaLoadedChanged().then(() => {
         setPaused(cast.paused);
       })
@@ -22,13 +22,13 @@ function useCast () {
     function playing() {
       setPaused(false);
     }
-    function timeUpdate() {
-      setTimer(cast.time);
+    function timeUpdate(time) {
+      setTimer(time);
     }
-    cast.on('connect', connect);
+    cast.on('connect', () => connect(cast));
     cast.on('pause', pause)
     cast.on('playing', playing)
-    cast.on('timeupdate', timeUpdate)
+    cast.on('timeupdate', () => timeUpdate(cast.time))
 
     return () => {
       cast.off(connect);
