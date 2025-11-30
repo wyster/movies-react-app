@@ -104,51 +104,55 @@ class Castjs {
   _isMediaLoadedChanged() {
     // don't update media info if not available
     if (!this._player.isMediaLoaded) {
-      return
+      return Promise.resolve();
     }
     // there is a bug where mediaInfo is not directly available
     // so we are skipping one tick in the event loop, zzzzzzzzz
-    setTimeout(() => {
-      if (!this._player.mediaInfo) {
-        return
-      }
-      // Update device name
-      this.device = cast.framework.CastContext.getInstance().getCurrentSession().getCastDevice().friendlyName || this.device
-
-      // Update media variables
-      this.src                = this._player.mediaInfo.contentId;
-      this.title              = this._player.title || null;
-      this.description        = this._player.mediaInfo.metadata.subtitle || null;
-      this.poster             = this._player.imageUrl || null;
-      this.subtitles          = [];
-      this.volumeLevel        = this.volumeLevel = Number((this._player.volumeLevel).toFixed(1));
-      this.muted              = this._player.isMuted;
-      this.paused             = this._player.isPaused;
-      this.time               = Math.round(this._player.currentTime, 1);
-      this.timePretty         = this._controller.getFormattedTime(this.time);
-      this.duration           = this._player.duration;
-      this.durationPretty     = this._controller.getFormattedTime(this._player.duration);
-      this.progress           = this._controller.getSeekPosition(this.time, this._player.duration);
-      this.state              = this._player.playerState.toLowerCase();
-
-      // Loop over the subtitle tracks
-      for (var i in this._player.mediaInfo.tracks) {
-        // Check for subtitle
-        if (this._player.mediaInfo.tracks[i].type === 'TEXT') {
-          // Push to media subtitles array
-          this.subtitles.push({
-            label: this._player.mediaInfo.tracks[i].name,
-            src:   this._player.mediaInfo.tracks[i].trackContentId
-          });
+    return new Promise(resolve => {
+      setTimeout(() => {
+        if (!this._player.mediaInfo) {
+          resolve();
+          return;
         }
-      }
-      // Get the active subtitle
-      var active = cast.framework.CastContext.getInstance().getCurrentSession().getSessionObj().media[0].activeTrackIds;
-      if (active && active.length && this.subtitles[active[0]]) {
-        this.subtitles[active[0]].active = true;
-      }
-    })
+        // Update device name
+        this.device = cast.framework.CastContext.getInstance().getCurrentSession().getCastDevice().friendlyName || this.device
 
+        // Update media variables
+        this.src                = this._player.mediaInfo.contentId;
+        this.title              = this._player.title || null;
+        this.description        = this._player.mediaInfo.metadata.subtitle || null;
+        this.poster             = this._player.imageUrl || null;
+        this.subtitles          = [];
+        this.volumeLevel        = this.volumeLevel = Number((this._player.volumeLevel).toFixed(1));
+        this.muted              = this._player.isMuted;
+        this.paused             = this._player.isPaused;
+        this.time               = Math.round(this._player.currentTime, 1);
+        this.timePretty         = this._controller.getFormattedTime(this.time);
+        this.duration           = this._player.duration;
+        this.durationPretty     = this._controller.getFormattedTime(this._player.duration);
+        this.progress           = this._controller.getSeekPosition(this.time, this._player.duration);
+        this.state              = this._player.playerState.toLowerCase();
+
+        // Loop over the subtitle tracks
+        for (var i in this._player.mediaInfo.tracks) {
+          // Check for subtitle
+          if (this._player.mediaInfo.tracks[i].type === 'TEXT') {
+            // Push to media subtitles array
+            this.subtitles.push({
+              label: this._player.mediaInfo.tracks[i].name,
+              src:   this._player.mediaInfo.tracks[i].trackContentId
+            });
+          }
+        }
+        // Get the active subtitle
+        var active = cast.framework.CastContext.getInstance().getCurrentSession().getSessionObj().media[0].activeTrackIds;
+        if (active && active.length && this.subtitles[active[0]]) {
+          this.subtitles[active[0]].active = true;
+        }
+
+        resolve();
+      })
+    });
   }
   // Player controller events
   _isConnectedChanged() {

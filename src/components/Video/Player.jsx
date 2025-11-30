@@ -30,6 +30,7 @@ function Player ({
   const videoElement = useRef()
   const videoContainer = useRef()
   const [timer, setTimer] = useState(null)
+  const [paused, setPaused] = useState(false)
   const [myCast, setMyCast] = useState(null)
   const { loading, error, data: movieData } = useQuery(GET_MOVIE_DETAILS, { variables: { id: movieId } })
 
@@ -85,7 +86,7 @@ function Player ({
     }
 
     const cast = new Cast({
-      joinpolicy: 'page_scoped',
+      joinpolicy: 'origin_scoped',
     });
     // Catch all events except 'error'
     cast.on('event', (e) => {
@@ -156,6 +157,44 @@ function Player ({
     videoElement.current.volume = volume / 100
   }, [volume])
 
+  function run() {
+    const cast = new Cast({
+      joinpolicy: 'origin_scoped',
+    });
+    // Catch all events except 'error'
+    cast.on('event', (e) => {
+      if (e === 'disconnect') {
+        setTimer(cast.time);
+        setMyCast(null);
+      }
+      if (e === 'session_error') {
+        setMyCast(null);
+      }
+      console.log('event:', e, 'state:', cast.state)
+    });
+    cast.on('timeupdate', () => {
+      console.log('timeupdate:', cast.timePretty, 'duration:', cast.durationPretty);
+      setTimer(cast.time);
+    })
+    cast.on('error', (e) => console.log(e));  // Catch any errors
+    cast.on('disconnect', (e) => {
+      console.log(e, 'disconnect')
+      setMyCast(null);
+    });
+    cast.on('connect', () => {
+      cast._isMediaLoadedChanged().then(() => {
+        setPaused(cast.paused);
+      })
+    });
+    cast.on('pause', () => {
+      setPaused(true);
+    })
+    cast.on('playing', () => {
+      setPaused(false);
+    })
+    setMyCast(cast);
+  }
+
   return (
     <>
       <button
@@ -181,6 +220,30 @@ function Player ({
       {currentTime > 0 && (
         <span className="badge rounded-pill bg-secondary">Current time {currentTime} sec</span>
       )}
+      <div>
+        <button
+          type="button"
+          className={`btn`}
+          onClick={e => {
+            e.preventDefault();
+            run();
+          }}
+        >
+          Connect to cast
+        </button>
+        {myCast && (
+          <button
+            type="button"
+            className={`btn`}
+            onClick={e => {
+              e.preventDefault();
+              paused ? myCast.play() : myCast.pause();
+            }}
+          >
+            {paused ? 'Play' : 'Pause'}
+          </button>
+        )}
+      </div>
       <div ref={videoContainer}>
         <Video
           ref={videoElement}
