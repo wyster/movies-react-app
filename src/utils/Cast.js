@@ -260,7 +260,7 @@ class Castjs {
     // Slice arguments into array
     var tail = Array.prototype.slice.call(arguments, 1);
     // If event exist, call callback with callback data
-    for (var i in this._events[event]) {
+    for (let i = 0; i < this._events[event]?.length; i++) {
       setTimeout(() => {
         this._events[event][i].apply(this, tail);
       }, 1)
@@ -271,7 +271,7 @@ class Castjs {
       return this
     }
     // call global event handler if exist
-    for (var i in this._events['event']) {
+    for (let i = 0; i < this._events['event']?.length; i++) {
       setTimeout(() => {
         this._events['event'][i].apply(this, [event]);
       }, 1)
@@ -450,7 +450,6 @@ class Castjs {
     if (isPercentage) {
       seconds = this._controller.getSeekTime(seconds, this._player.duration);
     }
-    console.log(this._player, this._player.currentTime);
     this._player.currentTime = seconds;
     this._controller.seek();
     return this;

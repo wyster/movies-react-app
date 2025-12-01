@@ -31,7 +31,7 @@ function Player ({
   const videoElement = useRef()
   const videoContainer = useRef()
   const [timer, setTimer] = useState(null)
-  const {myCast, setMyCast, paused, timer: myCastTimer} = useCast();
+  const {cast: myCastJs, myCast, setCast} = useCast();
   const { loading, error, data: movieData } = useQuery(GET_MOVIE_DETAILS, { variables: { id: movieId } })
 
   const { Video, player, ready } = useVideoJS(
@@ -43,7 +43,7 @@ function Player ({
   }
 
   function timeUpdate (e) {
-    if (!ready || myCast?.state === 'playing') {
+    if (!ready || myCastJs?.state === 'playing') {
       return;
     }
     const value = parseInt(e.target.currentTime, 10)
@@ -69,15 +69,15 @@ function Player ({
   }
 
   function cast()  {
-    if (myCast && myCast.connected) {
-      if (myCast.src === src) {
-        myCast.play();
+    if (myCast.connected) {
+      if (myCastJs.src === src) {
+        myCastJs.play();
         return;
       }
       if (currentTime) {
-        myCast.seek(currentTime);
+        myCastJs.seek(currentTime);
       }
-      myCast.cast(src, {
+      myCastJs.cast(src, {
         poster : movieData?.movie?.poster,
         title : movieData?.movie?.name,
         description: movieData?.movie?.description,
@@ -92,17 +92,17 @@ function Player ({
     cast.on('event', (e) => {
       if (e === 'disconnect') {
         setTimer(cast.time);
-        setMyCast(null);
+        setCast(null);
       }
       if (e === 'session_error') {
-        setMyCast(null);
+        setCast(null);
       }
       console.log('event:', e, 'state:', cast.state)
     });
     cast.on('error', (e) => console.log(e));  // Catch any errors
     cast.on('disconnect', (e) => {
       console.log(e, 'disconnect')
-      setMyCast(null);
+      setCast(null);
     });
     if (!cast.available) {
       throw 'cast not available';
@@ -113,7 +113,7 @@ function Player ({
       title : movieData?.movie?.name,
       description: movieData?.movie?.description,
     });
-    setMyCast(cast);
+    setCast(cast);
   }
 
   useEffect(() => {
@@ -128,7 +128,7 @@ function Player ({
   }, [player])
 
   useEffect(() => {
-    if (!videoElement.current || !videoElement.current.paused || myCast?.connected) {
+    if (!videoElement.current || !videoElement.current.paused || !myCast.connected) {
       return
     }
     if (!currentTime) {
@@ -154,8 +154,8 @@ function Player ({
   }, [volume])
 
   useEffect(() => {
-    setTimer(myCastTimer);
-  }, [myCastTimer]);
+    setTimer(myCast.timer);
+  }, [myCast.timer]);
 
   function run() {
     const cast = new Cast({
@@ -163,21 +163,17 @@ function Player ({
     });
     // Catch all events except 'error'
     cast.on('event', (e) => {
-      if (e === 'disconnect') {
+      /*if (e === 'disconnect') {
         setTimer(cast.time);
-        setMyCast(null);
+        setCast(null);
       }
       if (e === 'session_error') {
-        setMyCast(null);
-      }
+        setCast(null);
+      }*/
       console.log('event:', e, 'state:', cast.state)
     });
     cast.on('error', (e) => console.log(e));  // Catch any errors
-    cast.on('disconnect', (e) => {
-      console.log(e, 'disconnect')
-      setMyCast(null);
-    });
-    setMyCast(cast);
+    setCast(cast);
   }
 
   return (
@@ -206,26 +202,40 @@ function Player ({
         <span className="badge rounded-pill bg-secondary">Current time {currentTime} sec</span>
       )}
       <div>
-        <button
-          type="button"
-          className={`btn`}
-          onClick={e => {
-            e.preventDefault();
-            run();
-          }}
-        >
-          Connect to cast
-        </button>
-        {myCast && (
+        {!myCast.connected && (
           <button
             type="button"
             className={`btn`}
             onClick={e => {
               e.preventDefault();
-              paused ? myCast.play() : myCast.pause();
+              run();
             }}
           >
-            {paused ? 'Play' : 'Pause'}
+            Connect to cast
+          </button>
+        )}
+        {myCast.connected && (
+          <button
+            type="button"
+            className={`btn`}
+            onClick={e => {
+              e.preventDefault();
+              myCast.paused ? myCastJs.play() : myCastJs.pause();
+            }}
+          >
+            {myCast.paused ? 'Play' : 'Pause'}
+          </button>
+        )}
+        {myCast.connected && (
+          <button
+            type="button"
+            className={`btn`}
+            onClick={e => {
+              e.preventDefault();
+              myCastJs.disconnect();
+            }}
+          >
+            Disconnect
           </button>
         )}
       </div>
