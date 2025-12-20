@@ -154,8 +154,10 @@ function Player ({
   }, [volume])
 
   useEffect(() => {
-    setTimer(myCast.timer);
-  }, [myCast.timer]);
+    if (myCast.paused) {
+      setTimer(myCast.timer);
+    }
+  }, [myCast.paused]);
 
   function run() {
     const cast = new Cast({
