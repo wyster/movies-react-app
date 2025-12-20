@@ -201,7 +201,9 @@ function Player ({
         Cast
       </button>
       {currentTime > 0 && (
-        <span className="badge rounded-pill bg-secondary">Current time {currentTime} sec</span>
+        <span className="badge rounded-pill bg-secondary" onClick={() => myCast.timer ? setTimer(myCast.timer) : null} title="Update current time">
+          Current time {currentTime} sec
+        </span>
       )}
       <div>
         {!myCast.connected && (
