@@ -14,7 +14,8 @@ const GET_MOVIE_DETAILS = gql`
       description,
       poster,
       translators,
-      originalName
+      originalName,
+      year
     }
   }
 `
@@ -112,7 +113,7 @@ function MovieInfo ({ id }) {
   return (
     <>
       {movieInfo && (
-        <h4>{movieInfo.originalName || movieInfo.name}</h4>
+        <h4>{movieInfo.originalName || movieInfo.name} ({movieInfo.year})</h4>
       )}
       {movieInfo && movieInfo.isSerial && (
         <Serial
