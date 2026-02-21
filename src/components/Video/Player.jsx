@@ -249,7 +249,7 @@ function Player ({
           className="video-js"
           controls
           onEnded={ended}
-          onTimeUpdate={timeUpdate}
+          //onTimeUpdate={timeUpdate}
           onVolumeChange={volumeChange}
         />
       </div>
