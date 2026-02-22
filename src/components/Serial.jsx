@@ -136,7 +136,7 @@ function Serial ({
     })
 
     if (video) {
-      return video.video
+      return video.playlist // video.video
     }
 
     return undefined
