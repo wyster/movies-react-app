@@ -1,8 +1,4 @@
 export function prepareUri(uri) {
-  if (typeof uri === "object" && uri !== null) {
-    return uri;
-  }
-
   if (typeof uri !== 'string') {
     throw new Error('Uri is not has string type');
   }

@@ -40,7 +40,7 @@ function Film ({
     if (!playerData) {
       return;
     }
-    setVideos(prepareUri(playerData.data.url));
+    setVideos(typeof playerData.data.url === 'string' ? prepareUri(playerData.data.url) : playerData.data);
   }, [playerData])
 
   useEffect(() => {
