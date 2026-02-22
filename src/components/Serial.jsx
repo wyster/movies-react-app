@@ -20,7 +20,7 @@ const GET_SERIAL_DATA = gql`
 const GET_PLAYER = gql`
   query MoviePlayer($serialId: Number, $translatorId: Number, $episodeId: Number, $seasonId: Number) {
     data(serialId: $serialId, translatorId: $translatorId, episodeId: $episodeId, seasonId: $seasonId) @rest(type: "MoviePlayer", path: "serial/player?id={args.serialId}&translator_id={args.translatorId}&episode={args.episodeId}&season={args.seasonId}") {
-      url
+      streams
     }
   }
 `
@@ -51,7 +51,7 @@ function Serial ({
     if (!playerData) {
       return;
     }
-    setVideos(typeof playerData.data.url === 'string' ? prepareUri(playerData.data.url) : playerData.data);
+    setVideos(playerData.data.streams);
   }, [playerData])
 
   useEffect(() => {

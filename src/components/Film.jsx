@@ -9,7 +9,7 @@ import {prepareUri} from "../utils/UriHelper";
 const GET_PLAYER = gql`
   query MoviePlayer($filmId: Number, $translatorId: Number) {
     data(filmId: $filmId, translatorId: $translatorId) @rest(type: "MoviePlayer", path: "movie/player?id={args.filmId}&translator_id={args.translatorId}") {
-      url
+      streams
     }
   }
 `
@@ -40,7 +40,7 @@ function Film ({
     if (!playerData) {
       return;
     }
-    setVideos(typeof playerData.data.url === 'string' ? prepareUri(playerData.data.url) : playerData.data);
+    setVideos(playerData.data.streams);
   }, [playerData])
 
   useEffect(() => {
