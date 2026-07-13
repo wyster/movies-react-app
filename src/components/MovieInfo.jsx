@@ -148,6 +148,7 @@ function MovieInfo ({ id }) {
             {Array.isArray(value) && JSON.stringify(value)}
             {typeof value === 'string' && value}
             {typeof value === 'boolean' && (value ? 'Yes' : 'No')}
+            {typeof value === 'number' && value}
           </li>
         ))}
       </ul>
