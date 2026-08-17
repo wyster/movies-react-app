@@ -54,6 +54,9 @@ jobs:
           name: build
           path: build
 
+      - name: Set up Docker
+        uses: docker/setup-docker-action@v5
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -90,6 +93,9 @@ jobs:
         with:
           name: build
           path: build
+
+      - name: Set up Docker
+        uses: docker/setup-docker-action@v5
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
