@@ -69,14 +69,14 @@ function Player ({
       console.log(e, 'disconnect')
       setCast(null);
     });
-    if (!cast.available) {
-      throw 'cast not available';
-    }
-    cast.time = currentTime;
-    cast.cast(src, {
-      poster : movieData?.movie?.poster,
-      title : movieData?.movie?.name,
-      description: movieData?.movie?.description,
+    cast.on('available', (e) => {
+      console.log(e, 'available');
+      cast.time = currentTime;
+      cast.cast(src, {
+        poster : movieData?.movie?.poster,
+        title : movieData?.movie?.name,
+        description: movieData?.movie?.description,
+      });
     });
     setCast(cast);
   }

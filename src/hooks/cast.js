@@ -30,7 +30,7 @@ function useCast () {
     cast.on('connect', () => connect(cast));
     cast.on('pause', pause)
     cast.on('playing', playing)
-    cast.on('timeupdate', () => timeUpdate(cast.time))
+    cast.on('timeupdate', () => timeUpdate(cast.time()))
     cast.on('event', () => {
       if (cast.state === 'playing') {
         setPaused(false);
