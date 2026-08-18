@@ -75,7 +75,7 @@ jobs:
       - name: Install Docker CLI
         run: |
           apt-get update
-          apt-get install -y --no-install-recommends docker.io
+          apt-get install -y --no-install-recommends docker.io docker-buildx
 
       - name: Verify Docker
         run: |
@@ -130,7 +130,7 @@ jobs:
       - name: Install Docker CLI
         run: |
           apt-get update
-          apt-get install -y --no-install-recommends docker.io
+          apt-get install -y --no-install-recommends docker.io docker-buildx
 
       - name: Verify Docker
         run: |
