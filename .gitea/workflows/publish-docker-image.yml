@@ -54,8 +54,13 @@ jobs:
           name: build
           path: build
 
-      - name: Set up Docker
-        uses: docker/setup-docker-action@v5
+      - name: Install Docker CLI
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends docker.io
+
+      - name: Verify Docker
+        run: docker info
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -76,7 +81,7 @@ jobs:
           context: .
           push: true
           platforms: linux/arm64
-          tags: ${{ secrets.GITEA_REGISTRY }}/${{ gitea.repository }}:movies-react-app-latest
+          tags: ${{ secrets.GITEA_REGISTRY }}/${{ gitea.repository }}:movies-app-latest
 
   publish_tag:
     name: Publish tagged image
@@ -94,8 +99,13 @@ jobs:
           name: build
           path: build
 
-      - name: Set up Docker
-        uses: docker/setup-docker-action@v5
+      - name: Install Docker CLI
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends docker.io
+
+      - name: Verify Docker
+        run: docker info
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
