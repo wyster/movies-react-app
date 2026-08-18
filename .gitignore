@@ -27,3 +27,4 @@ public/env-config.js
 docker-compose.override.yml
 .idea
 .yarn
+.cache

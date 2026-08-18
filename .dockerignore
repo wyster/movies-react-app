@@ -1,3 +1,6 @@
 .github
 .git
 node_modules
+.cache
+.gitea
+.yarn
