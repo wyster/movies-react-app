@@ -60,6 +60,7 @@ jobs:
     needs: build
     if: gitea.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - name: Checkout
@@ -105,6 +106,7 @@ jobs:
     needs: build
     if: startsWith(gitea.ref, 'refs/tags/')
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - name: Checkout
