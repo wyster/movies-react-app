@@ -51,6 +51,7 @@ jobs:
       - name: Build frontend
         env:
           CI: true
+          NODE_ENV: production
         run: yarn build
 
 #      - name: Build SSR

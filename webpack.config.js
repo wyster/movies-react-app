@@ -4,8 +4,10 @@ const CopyPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = (env, argv) => {
-  const isProduction = argv.mode === 'production';
+  const mode = argv?.mode || process.env.NODE_ENV || 'development';
+  const isProduction = mode === 'production';
   return {
+    mode,
     entry: "./src/index.tsx",
     output: {
       path: path.resolve(__dirname, "build"),
@@ -93,6 +95,7 @@ module.exports = (env, argv) => {
       type: 'filesystem',
       name: isProduction ? 'frontend-production' : 'frontend-development',
       version: JSON.stringify({
+        mode,
         nodeEnv: process.env.NODE_ENV,
       }),
       cacheDirectory: path.resolve(__dirname, '.cache/webpack/frontend'),
