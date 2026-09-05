@@ -52,7 +52,7 @@ jobs:
         env:
           CI: true
           NODE_ENV: production
-        run: yarn build
+        run: npx webpack build --mode=development
 
 #      - name: Build SSR
 #        env:
