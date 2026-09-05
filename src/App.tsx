@@ -2,14 +2,14 @@ import { ApolloProvider } from '@apollo/client'
 
 import './App.css'
 import { client } from './ApolloClient'
-import Layout from '../src/routes/Layout'
-import {BrowserRouter} from "react-router";
+import Layout from './routes/Layout'
+import { BrowserRouter } from 'react-router'
 
-function App () {
+function App() {
   return (
     <ApolloProvider client={client}>
       <BrowserRouter>
-        <Layout/>
+        <Layout />
       </BrowserRouter>
     </ApolloProvider>
   )
