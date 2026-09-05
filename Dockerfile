@@ -3,6 +3,7 @@ FROM node:${NODE_VERSION}-slim
 
 ARG APP_API_URL
 ENV REACT_APP_API_URL=${APP_API_URL}
+ENV NODE_ENV=production
 
 COPY . /app
 WORKDIR /app
