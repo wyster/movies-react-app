@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useState} from 'react'
-import { useQuery } from '@apollo/client/react'
+import { useQuery } from '@apollo/client'
 import gql from 'graphql-tag'
 import Serial from "./Serial";
 import Film from "./Film";

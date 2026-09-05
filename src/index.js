@@ -10,11 +10,11 @@ if (window.SENTRY_DSN) {
   Sentry.init({
     dsn: window.SENTRY_DSN,
     integrations: [
-      new Sentry.BrowserTracing({
+      Sentry.browserTracingIntegration({
         // Set 'tracePropagationTargets' to control for which URLs distributed tracing should be enabled
         tracePropagationTargets: ["localhost"],
       }),
-      new Sentry.Replay(),
+      Sentry.replayIntegration(),
     ],
     // Performance Monitoring
     tracesSampleRate: 1.0, //  Capture 100% of the transactions

@@ -19,7 +19,8 @@
     "build:ssr": "webpack -c ssr/webpack.config.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "serve": "npx webpack serve --mode=development"
+    "serve": "npx webpack serve --mode=development",
+    "typecheck": "tsc --noEmit"
   },
   "eslintConfig": {
     "extends": [
@@ -28,7 +29,7 @@
     ]
   },
   "devDependencies": {
-    "@apollo/client": "^4.2.12",
+    "@apollo/client": "^3.8.8",
     "@babel/core": "^8.0.1",
     "@babel/plugin-transform-runtime": "^8.0.1",
     "@babel/preset-env": "^8.0.2",
@@ -40,7 +41,11 @@
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
     "@testing-library/user-event": "^14.6.7",
-    "apollo-link-rest": "^0.10.0-rc.2",
+    "@types/jest": "^30.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@types/videojs": "^5.16.2",
+    "apollo-link-rest": "0.9",
     "astroturf": "^1.2.0",
     "autoprefixer": "^10.5.5",
     "babel-loader": "^10.1.1",

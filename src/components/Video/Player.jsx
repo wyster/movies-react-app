@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import Cast from '../../utils/Cast';
 import gql from "graphql-tag";
-import {useQuery} from "@apollo/client/react";
+import {useQuery} from "@apollo/client";
 import useCast from "../../hooks/cast";
 import { createPlayer, videoFeatures } from '@videojs/react';
 import { VideoSkin, Video } from '@videojs/react/video';

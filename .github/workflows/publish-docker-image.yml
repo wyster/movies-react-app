@@ -45,6 +45,9 @@ jobs:
       #    CI: true
       #  run: yarn test
 
+      - name: Typecheck
+        run: yarn typecheck
+
       - name: Build frontend
         env:
           CI: true

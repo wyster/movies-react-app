@@ -12,14 +12,14 @@ module.exports = (env, argv) => {
       publicPath: '/',
     },
     resolve: {
-      extensions: ['.js', '.jsx'],
+      extensions: ['.js', '.jsx', '.ts', '.tsx'],
     },
     //devtool: 'source-map',
     devtool: false,
     module: {
       rules: [
         {
-          test: /\.(js|jsx)$/,
+          test: /\.(js|jsx|ts|tsx)$/,
           include: [
             path.resolve('src'),
           ],
@@ -36,6 +36,9 @@ module.exports = (env, argv) => {
                     {
                       "runtime": "automatic"
                     }
+                  ],
+                  [
+                    "@babel/preset-typescript"
                   ]
                 ],
               }

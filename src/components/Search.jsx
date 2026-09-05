@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import gql from 'graphql-tag'
-import { useLazyQuery } from '@apollo/client/react'
+import { useLazyQuery } from '@apollo/client'
 import {NavLink} from "react-router";
 
 const SEARCH = gql`

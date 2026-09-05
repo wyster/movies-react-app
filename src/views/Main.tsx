@@ -1,8 +1,8 @@
 import MainComponent from '../components/Main'
 
-function Main () {
+function Main() {
   return (
-    <MainComponent/>
+    <MainComponent />
   )
 }
 
