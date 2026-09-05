@@ -28,3 +28,4 @@ docker-compose.override.yml
 .idea
 .yarn
 .cache
+bin/index.js
