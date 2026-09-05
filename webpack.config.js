@@ -32,11 +32,7 @@ module.exports = (env, argv) => {
                     "@babel/preset-env"
                   ],
                   [
-                    "@babel/preset-react",
-                    {
-                      "runtime": "automatic",
-                      "development": !isProduction
-                    }
+                    "@babel/preset-react"
                   ],
                   [
                     "@babel/preset-typescript"
