@@ -34,7 +34,8 @@ module.exports = (env, argv) => {
                   [
                     "@babel/preset-react",
                     {
-                      "runtime": "automatic"
+                      "runtime": "automatic",
+                      "development": !isProduction
                     }
                   ],
                   [
