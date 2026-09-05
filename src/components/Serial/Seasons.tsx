@@ -1,4 +1,15 @@
-function Seasons({seasons, seasonId, onClickOnSeason}) {
+interface Season {
+  id: number
+  title: string
+}
+
+interface SeasonsProps {
+  seasons: Season[]
+  seasonId: number
+  onClickOnSeason: (seasonId: number) => void
+}
+
+function Seasons({ seasons, seasonId, onClickOnSeason }: SeasonsProps) {
   return (
     <>
       {seasons.length > 0 && (
@@ -8,8 +19,8 @@ function Seasons({seasons, seasonId, onClickOnSeason}) {
               <button
                 key={item.id}
                 className={`btn btn-link nav-link ${seasonId === item.id ? 'active' : ''}`}
-                onClick={(e) => {
-                  e.preventDefault();
+                onClick={(event) => {
+                  event.preventDefault()
                   onClickOnSeason(item.id)
                 }}
               >
@@ -23,4 +34,4 @@ function Seasons({seasons, seasonId, onClickOnSeason}) {
   )
 }
 
-export default Seasons;
+export default Seasons

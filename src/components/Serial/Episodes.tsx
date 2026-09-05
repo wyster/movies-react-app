@@ -1,8 +1,19 @@
+interface Episode {
+  episode: number
+  title: string
+}
+
+interface EpisodesProps {
+  episodes?: Episode[]
+  episodeId: number
+  onClickOnEpisode?: (episodeId: number) => void
+}
+
 function Episodes({
   episodes = [],
   episodeId,
-  onClickOnEpisode = () => {}
-}) {
+  onClickOnEpisode = () => {},
+}: EpisodesProps) {
   return (
     <>
       {episodes.length > 0 && (
@@ -13,8 +24,8 @@ function Episodes({
                 type="button"
                 key={item.episode}
                 className={`btn btn-link nav-link ${episodeId === item.episode ? 'active' : ''}`}
-                onClick={(e) => {
-                  e.preventDefault();
+                onClick={(event) => {
+                  event.preventDefault()
                   onClickOnEpisode(item.episode)
                 }}
               >
@@ -28,4 +39,4 @@ function Episodes({
   )
 }
 
-export default Episodes;
+export default Episodes

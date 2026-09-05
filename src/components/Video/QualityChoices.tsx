@@ -1,4 +1,18 @@
-function QualityChoices({qualities, quality, onClickOnQuality}) {
+interface Quality {
+  quality: string
+}
+
+interface QualityChoicesProps {
+  qualities: Quality[]
+  quality: string
+  onClickOnQuality: (quality: string) => void
+}
+
+function QualityChoices({
+  qualities,
+  quality,
+  onClickOnQuality,
+}: QualityChoicesProps) {
   return (
     <>
       {qualities.length > 0 && (
@@ -9,8 +23,8 @@ function QualityChoices({qualities, quality, onClickOnQuality}) {
                 type="button"
                 key={item.quality}
                 className={`btn btn-link nav-link ${quality === item.quality ? 'active' : ''}`}
-                onClick={(e) => {
-                  e.preventDefault();
+                onClick={(event) => {
+                  event.preventDefault()
                   onClickOnQuality(item.quality)
                 }}
               >
@@ -24,4 +38,4 @@ function QualityChoices({qualities, quality, onClickOnQuality}) {
   )
 }
 
-export default QualityChoices;
+export default QualityChoices

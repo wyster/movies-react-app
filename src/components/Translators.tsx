@@ -1,4 +1,19 @@
-function Translators ({ translators, translatorId, onClickOnTranslator }) {
+interface Translator {
+  id: number
+  title: string
+}
+
+interface TranslatorsProps {
+  translators: Translator[]
+  translatorId: number | null | undefined
+  onClickOnTranslator: (translatorId: number) => void
+}
+
+function Translators({
+  translators,
+  translatorId,
+  onClickOnTranslator,
+}: TranslatorsProps) {
   return (
     <>
       {translators.length > 0 && (
@@ -8,8 +23,8 @@ function Translators ({ translators, translatorId, onClickOnTranslator }) {
               type="button"
               key={translator.id}
               className={`btn btn-link nav-link ${translatorId === translator.id ? 'active' : ''}`}
-              onClick={e => {
-                e.preventDefault();
+              onClick={(event) => {
+                event.preventDefault()
                 onClickOnTranslator(translator.id)
               }}
             >

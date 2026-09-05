@@ -3,8 +3,7 @@ import Cast from '../../utils/Cast';
 import gql from "graphql-tag";
 import {useQuery} from "@apollo/client";
 import useCast from "../../hooks/cast";
-import { createPlayer, videoFeatures } from '@videojs/react';
-import { VideoSkin, Video } from '@videojs/react/video';
+import { VideoSkin, Video, VideoPlayer } from '@videojs/react/video';
 
 const GET_MOVIE_DETAILS = gql`
   query MovieDetails($id: Number) {
@@ -26,7 +25,6 @@ function Player ({
   onEnded = () => {},
   autoPlay = false
 }) {
-  const Player = createPlayer({ features: videoFeatures });
   const videoElement = useRef()
   const videoContainer = useRef()
   const [timer, setTimer] = useState(null)
@@ -162,11 +160,11 @@ function Player ({
         )}
       </div>
       <div ref={videoContainer}>
-        <Player.Provider>
+        <VideoPlayer>
           <VideoSkin>
             <Video src={src} playsInline />
           </VideoSkin>
-        </Player.Provider>
+        </VideoPlayer>
       </div>
     </>
   )
