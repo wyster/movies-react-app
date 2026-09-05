@@ -17,9 +17,9 @@ const GET_MOVIE_DETAILS = gql`
 
 interface MovieData {
   movie?: {
-    name?: string
-    description?: string
-    poster?: string
+    name: string
+    description: string
+    poster: string
   }
 }
 
