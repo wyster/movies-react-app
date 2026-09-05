@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import gql from 'graphql-tag'
 import { useLazyQuery } from '@apollo/client'
-import {NavLink} from "react-router";
+import { NavLink } from 'react-router'
 
 const SEARCH = gql`
   query Search($q: String) {
@@ -13,38 +13,50 @@ const SEARCH = gql`
   }
 `
 
-function Search () {
-  const [load, { loading, error, data: results }] = useLazyQuery(SEARCH)
+interface SearchResult {
+  id: number
+  name: string
+  year: number
+}
+
+interface SearchData {
+  search: SearchResult[]
+}
+
+function Search() {
+  const [load, { loading, error, data: results }] =
+    useLazyQuery<SearchData>(SEARCH)
   const [query, setQuery] = useState('')
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      if (query?.length >= 3) {
-        load({variables: {q: query}})
+      if (query.length >= 3) {
+        load({ variables: { q: query } })
       }
-    }, 500); // 500ms debounce
+    }, 500)
 
-    // Cleanup the timeout if value changes before 500ms
-    return () => clearTimeout(handler);
-  }, [query]);
+    return () => clearTimeout(handler)
+  }, [query, load])
 
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search)
     const q = searchParams.get('q')
-    if (q) {
-      setQuery(q)
-    }
+    if (q) setQuery(q)
   }, [])
 
-  function onChange (value) {
+  function onChange(value: string) {
     if (!value) {
       window.history.pushState({}, document.title, window.location.pathname)
     } else {
       const searchParams = new URLSearchParams(window.location.search)
       searchParams.set('q', value)
-      window.history.pushState({}, document.title, `?${searchParams.toString()}`)
+      window.history.pushState(
+        {},
+        document.title,
+        `?${searchParams.toString()}`,
+      )
     }
-    setQuery(value);
+    setQuery(value)
   }
 
   return (
@@ -52,13 +64,17 @@ function Search () {
       <label className="w-100">
         <div className="input-group input-group-lg">
           <input
-            onChange={(e) => onChange(e.target.value)}
+            onChange={event => onChange(event.target.value)}
             value={query}
             className={`form-control ${error ? 'is-invalid' : ''}`}
           />
           {loading && (
             <div className="input-group-text">
-              <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              <span
+                className="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              />
               <span className="visually-hidden">Loading...</span>
             </div>
           )}
@@ -68,7 +84,9 @@ function Search () {
         <ul className="list-group">
           {results.search.map(item => (
             <li className="list-group-item" key={item.id}>
-              <NavLink to={`/movie/${item.id}`}>{item.name} ({item.year})</NavLink>
+              <NavLink to={`/movie/${item.id}`}>
+                {item.name} ({item.year})
+              </NavLink>
             </li>
           ))}
         </ul>
