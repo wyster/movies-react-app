@@ -1,26 +1,15 @@
 import { useEffect, useRef, useState } from 'react'
 import Cast from '../../utils/Cast'
-import gql from 'graphql-tag'
-import { useQuery } from '@apollo/client'
+import { useQuery } from '@tanstack/react-query'
+import { getMovieDetails } from '../../api'
 import useCast from '../../hooks/cast'
 import { VideoSkin, Video, VideoPlayer } from '@videojs/react/video'
 
-const GET_MOVIE_DETAILS = gql`
-  query MovieDetails($id: Number) {
-    movie(id: $id) @rest(type: "MovieDetails", path: "details?id={args.id}") {
-      name,
-      description,
-      poster
-    }
-  }
-`
 
 interface MovieData {
-  movie?: {
-    name: string
-    description: string
-    poster: string
-  }
+  name: string
+  description: string
+  poster: string
 }
 
 interface PlayerProps {
@@ -48,9 +37,7 @@ function Player({
   const videoContainer = useRef<HTMLDivElement | null>(null)
   const [timer, setTimer] = useState<number | null>(null)
   const { cast: myCastJs, myCast, setCast } = useCast() as any
-  const { data: movieData } = useQuery<MovieData>(GET_MOVIE_DETAILS, {
-    variables: { id: movieId },
-  })
+  const { data: movieData } = useQuery<MovieData>({ queryKey: ['movie-details', movieId], queryFn: () => getMovieDetails(movieId) })
 
   function cast() {
     if (myCast.connected) {
@@ -60,9 +47,9 @@ function Player({
       }
       if (currentTime) myCastJs.seek(currentTime)
       myCastJs.cast(src, {
-        poster: movieData?.movie?.poster,
-        title: movieData?.movie?.name,
-        description: movieData?.movie?.description,
+        poster: movieData?.poster,
+        title: movieData?.name,
+        description: movieData?.description,
       })
       return
     }
@@ -85,9 +72,9 @@ function Player({
       console.log(event, 'available')
       castInstance.time = currentTime
       castInstance.cast(src, {
-        poster: movieData?.movie?.poster,
-        title: movieData?.movie?.name,
-        description: movieData?.movie?.description,
+        poster: movieData?.poster,
+        title: movieData?.name,
+        description: movieData?.description,
       })
     })
     setCast(castInstance)

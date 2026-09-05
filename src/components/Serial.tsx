@@ -1,28 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
-import gql from 'graphql-tag'
-import { useLazyQuery } from '@apollo/client'
+import { useQuery } from '@tanstack/react-query'
+import { getSerialData, getSerialPlayer } from '../api'
 import Translators from './Serial/Translators'
 import Seasons from './Serial/Seasons'
 import Episodes from './Serial/Episodes'
 import QualityChoices from './Video/QualityChoices'
 import Player from './Video/Player'
 
-const GET_SERIAL_DATA = gql`
-  query SerialData($serialId: Number, $translatorId: Number) {
-    data(serialId: $serialId, translatorId: $translatorId) @rest(type: "SerialData", path: "serial/episodes?id={args.serialId}&translator_id={args.translatorId}") {
-      episodes,
-      seasons
-    }
-  }
-`
-
-const GET_PLAYER = gql`
-  query MoviePlayer($serialId: Number, $translatorId: Number, $episodeId: Number, $seasonId: Number) {
-    data(serialId: $serialId, translatorId: $translatorId, episodeId: $episodeId, seasonId: $seasonId) @rest(type: "MoviePlayer", path: "serial/player?id={args.serialId}&translator_id={args.translatorId}&episode={args.episodeId}&season={args.seasonId}") {
-      streams
-    }
-  }
-`
 
 interface Episode {
   episode: number
@@ -41,16 +25,12 @@ interface Video {
 }
 
 interface SerialData {
-  data: {
-    episodes: Episode[]
-    seasons: Season[]
-  }
+  episodes: Episode[]
+  seasons: Season[]
 }
 
 interface PlayerData {
-  data: {
-    streams: Video[]
-  }
+  streams: Video[]
 }
 
 interface SerialProps {
@@ -76,8 +56,6 @@ function Serial({
   playerVolume = 100,
   playerAutoPlay = false,
 }: SerialProps) {
-  const [getSerialData, {data: serialData}] = useLazyQuery<SerialData>(GET_SERIAL_DATA)
-  const [getPlayerData, {data: playerData}] = useLazyQuery<PlayerData>(GET_PLAYER)
   const [translatorId, setTranslatorId] = useState<number | null>(null)
   const [seasonEpisodes, setSeasonEpisodes] = useState<Episode[]>([])
   const [videos, setVideos] = useState<Video[]>([])
@@ -85,9 +63,11 @@ function Serial({
   const [episodeId, setEpisodeId] = useState<number | null>(null)
   const [quality, setQuality] = useState<string | null>(null)
   const [autoPlay, setAutoPlay] = useState(false)
+  const { data: serialData } = useQuery<SerialData>({ queryKey: ['serial', serialId, translatorId], queryFn: () => getSerialData(serialId, translatorId as number), enabled: translatorId !== null })
+  const { data: playerData } = useQuery<PlayerData>({ queryKey: ['serial-player', serialId, translatorId, seasonId, episodeId], queryFn: () => getSerialPlayer(serialId, translatorId as number, episodeId as number, seasonId as number), enabled: translatorId !== null && seasonId !== null && episodeId !== null })
 
   useEffect(() => {
-    if (playerData) setVideos(playerData.data.streams)
+    if (playerData) setVideos(playerData.streams)
   }, [playerData])
   useEffect(() => {
     setTranslatorId(propTranslatorId ?? null)
@@ -103,17 +83,15 @@ function Serial({
   }, [propQuality])
 
   useEffect(() => {
-    if (translatorId != null) getSerialData({ variables: { serialId, translatorId } })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [serialId, translatorId])
 
   useEffect(() => {
-    if (serialData) setSeasonEpisodes(serialData.data.episodes.filter(item => item.season === seasonId))
+    if (serialData) setSeasonEpisodes(serialData.episodes.filter(item => item.season === seasonId))
   }, [serialData, seasonId])
 
   useEffect(() => {
     if (translatorId !== null && seasonId !== null && episodeId !== null) {
-      getPlayerData({ variables: { serialId, translatorId, seasonId, episodeId } })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [serialId, translatorId, seasonId, episodeId])
@@ -154,7 +132,7 @@ function Serial({
       setAutoPlay(true);
       return
     }
-    if (serialData.data.seasons.find(item => item.id === seasonId + 1)) {
+    if (serialData.seasons.find(item => item.id === seasonId + 1)) {
       onClickOnSeason(seasonId + 1);
       setAutoPlay(true)
     }
@@ -166,7 +144,7 @@ function Serial({
       <Translators serialId={serialId} translatorId={translatorId as number} onClickOnTranslator={onClickOnTranslator} />
     </div>
     <div className="mt-1">
-      <Seasons seasonId={seasonId as number} seasons={serialData?.data.seasons || []} onClickOnSeason={onClickOnSeason} />
+      <Seasons seasonId={seasonId as number} seasons={serialData?.seasons || []} onClickOnSeason={onClickOnSeason} />
     </div>
     {seasonId && <div className="mt-1"><Episodes episodeId={episodeId as number} episodes={seasonEpisodes} onClickOnEpisode={onClickOnEpisode} /></div>}
     {videos.length > 0 &&

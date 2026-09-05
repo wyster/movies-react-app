@@ -1,17 +1,17 @@
-import { ApolloProvider } from '@apollo/client'
+import { QueryClientProvider } from '@tanstack/react-query'
 
 import './App.css'
-import { client } from './ApolloClient'
+import { queryClient } from './queryClient'
 import Layout from './routes/Layout'
 import { BrowserRouter } from 'react-router'
 
 function App() {
   return (
-    <ApolloProvider client={client}>
+    <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Layout />
       </BrowserRouter>
-    </ApolloProvider>
+    </QueryClientProvider>
   )
 }
 

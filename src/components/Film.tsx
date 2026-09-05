@@ -1,17 +1,10 @@
 import { useEffect, useState } from 'react'
-import gql from 'graphql-tag'
-import { useLazyQuery } from '@apollo/client'
+import { useQuery } from '@tanstack/react-query'
+import { getPlayer } from '../api'
 import Translators from './Translators'
 import QualityChoices from './Video/QualityChoices'
 import Player from './Video/Player'
 
-const GET_PLAYER = gql`
-  query MoviePlayer($filmId: Number, $translatorId: Number) {
-    data(filmId: $filmId, translatorId: $translatorId) @rest(type: "MoviePlayer", path: "movie/player?id={args.filmId}&translator_id={args.translatorId}") {
-      streams
-    }
-  }
-`
 
 interface Translator {
   id: number
@@ -24,9 +17,7 @@ interface Video {
 }
 
 interface PlayerData {
-  data: {
-    streams: Video[]
-  }
+  streams: Video[]
 }
 
 interface FilmProps {
@@ -48,11 +39,10 @@ function Film({
   translatorId: propTranslatorId,
   quality: propQuality,
 }: FilmProps) {
-  const [getPlayerData, { data: playerData }] =
-    useLazyQuery<PlayerData>(GET_PLAYER)
   const [translatorId, setTranslatorId] = useState<number | null>(null)
   const [videos, setVideos] = useState<Video[]>([])
   const [quality, setQuality] = useState<string | null>(null)
+  const { data: playerData } = useQuery<PlayerData>({ queryKey: ['player', filmId, translatorId], queryFn: () => getPlayer(filmId, translatorId as number), enabled: translatorId !== null })
 
   useEffect(() => {
     setTranslatorId(propTranslatorId ?? null)
@@ -63,13 +53,11 @@ function Film({
   }, [propQuality])
 
   useEffect(() => {
-    if (playerData) setVideos(playerData.data.streams)
+    if (playerData) setVideos(playerData.streams)
   }, [playerData])
 
   useEffect(() => {
-    if (translatorId !== null) {
-      getPlayerData({ variables: { filmId, translatorId } })
-    }
+    if (translatorId === null) setVideos([])
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filmId, translatorId])
 

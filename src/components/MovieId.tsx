@@ -1,14 +1,7 @@
 import { useEffect, useState } from 'react'
-import gql from 'graphql-tag'
-import { useLazyQuery } from '@apollo/client'
+import { useQuery } from '@tanstack/react-query'
+import { getMovieId } from '../api'
 
-const GET_MOVIE_ID = gql`
-  query MovieId($url: String) {
-    movie(url: $url) @rest(type: "MovieId", path: "id-from-url?url={args.url}") {
-      id
-    }
-  }
-`
 
 interface MovieIdData {
   movie?: {
@@ -21,8 +14,8 @@ interface MovieIdProps {
 }
 
 function MovieId({ onChangeMovieId }: MovieIdProps) {
-  const [load, { loading, error, data }] = useLazyQuery<MovieIdData>(GET_MOVIE_ID)
   const [movieUrl, setMovieUrl] = useState('')
+  const { isLoading: loading, error, data } = useQuery<MovieIdData>({ queryKey: ['movie-id', movieUrl], queryFn: () => getMovieId(movieUrl), enabled: Boolean(movieUrl) })
 
   useEffect(() => {
     if (data?.movie && movieUrl) {
@@ -33,9 +26,7 @@ function MovieId({ onChangeMovieId }: MovieIdProps) {
 
   useEffect(() => {
     if (movieUrl) {
-      load({ variables: { url: movieUrl } })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [movieUrl])
 
   useEffect(() => {
@@ -56,7 +47,6 @@ function MovieId({ onChangeMovieId }: MovieIdProps) {
         document.title,
         `?${searchParams.toString()}`,
       )
-      load({ variables: { url: value } })
     }
     setMovieUrl(value)
   }

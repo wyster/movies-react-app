@@ -1,17 +1,8 @@
 import { useEffect, useState } from 'react'
-import gql from 'graphql-tag'
-import { useLazyQuery } from '@apollo/client'
+import { useQuery } from '@tanstack/react-query'
+import { getSearch } from '../api'
 import { NavLink } from 'react-router'
 
-const SEARCH = gql`
-  query Search($q: String) {
-    search(q: $q) @rest(type: "Search", path: "search?q={args.q}") {
-      name,
-      id,
-      year
-    }
-  }
-`
 
 interface SearchResult {
   id: number
@@ -19,24 +10,18 @@ interface SearchResult {
   year: number
 }
 
-interface SearchData {
-  search: SearchResult[]
-}
-
 function Search() {
-  const [load, { loading, error, data: results }] =
-    useLazyQuery<SearchData>(SEARCH)
   const [query, setQuery] = useState('')
+  const { isLoading: loading, error, data: results } = useQuery<SearchResult[]>({ queryKey: ['search', query], queryFn: () => getSearch(query), enabled: query.length >= 3 })
 
   useEffect(() => {
     const handler = setTimeout(() => {
       if (query.length >= 3) {
-        load({ variables: { q: query } })
       }
     }, 500)
 
     return () => clearTimeout(handler)
-  }, [query, load])
+  }, [query])
 
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search)
@@ -80,9 +65,9 @@ function Search() {
           )}
         </div>
       </label>
-      {results?.search && (
+      {results && (
         <ul className="list-group">
-          {results.search.map(item => (
+          {results.map(item => (
             <li className="list-group-item" key={item.id}>
               <NavLink to={`/movie/${item.id}`}>
                 {item.name} ({item.year})

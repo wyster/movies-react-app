@@ -1,27 +1,11 @@
-import gql from 'graphql-tag'
-import { useQuery } from '@apollo/client'
+import { useQuery } from '@tanstack/react-query'
+import { getMovieDetails } from '../../api'
 import { default as List} from '../Translators'
 
-const GET_MOVIE_TRANSLATORS = gql`
-  query MovieTranslators($id: Number) {
-    details(id: $id) @rest(type: "MovieDetails", path: "details?id={args.id}") {
-      translators {
-        id,
-        title
-      }
-    }
-  }
-`
 
 interface Translator {
   id: number
   title: string
-}
-
-interface TranslatorsData {
-  details: {
-    translators: Translator[]
-  }
 }
 
 interface TranslatorsProps {
@@ -35,9 +19,7 @@ function Translators({
   translatorId,
   onClickOnTranslator,
 }: TranslatorsProps) {
-  const { loading, error, data } = useQuery<TranslatorsData>(GET_MOVIE_TRANSLATORS, {
-    variables: { id: serialId },
-  })
+  const { isLoading: loading, error, data } = useQuery<{ translators: Translator[] }>({ queryKey: ['movie-details', serialId], queryFn: () => getMovieDetails(serialId) })
 
   if (loading) {
     return (
@@ -55,7 +37,7 @@ function Translators({
     return null
   }
 
-  const { translators } = data.details
+  const { translators } = data
 
   return (
     <List translators={translators} translatorId={translatorId} onClickOnTranslator={onClickOnTranslator} />

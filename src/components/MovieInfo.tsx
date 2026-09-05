@@ -1,23 +1,10 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useQuery } from '@apollo/client'
-import gql from 'graphql-tag'
+import { useQuery } from '@tanstack/react-query'
+import { getMovieDetails } from '../api'
 import Serial from './Serial'
 import Film from './Film'
 import * as yup from 'yup'
 
-const GET_MOVIE_DETAILS = gql`
-  query MovieDetails($id: Number) {
-    movie(id: $id) @rest(type: "MovieDetails", path: "details?id={args.id}") {
-      isSerial,
-      name,
-      description,
-      poster,
-      translators,
-      originalName,
-      year
-    }
-  }
-`
 
 interface Translator {
   id: number
@@ -25,15 +12,13 @@ interface Translator {
 }
 
 interface MovieInfoData {
-  movie: {
-    isSerial: boolean
-    name: string
-    description: string
-    poster: string
-    translators: Translator[]
-    originalName: string
-    year: number
-  }
+  isSerial: boolean
+  name: string
+  description: string
+  poster: string
+  translators: Translator[]
+  originalName: string
+  year: number
 }
 
 interface QueryState {
@@ -73,10 +58,7 @@ interface MovieInfoProps {
 }
 
 function MovieInfo({ id }: MovieInfoProps) {
-  const { loading, error, data } = useQuery<MovieInfoData>(GET_MOVIE_DETAILS, {
-    variables: { id },
-    skip: !id,
-  })
+  const { isLoading: loading, error, data } = useQuery<MovieInfoData>({ queryKey: ['movie-details', id], queryFn: () => getMovieDetails(id), enabled: Boolean(id) })
   const [query, setQuery] = useState<QueryState>(defaultQuery)
 
   const onUpdateState = useCallback((values: StateUpdate) => {
@@ -94,7 +76,7 @@ function MovieInfo({ id }: MovieInfoProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query])
 
-  function buildDocumentTitle(movie: MovieInfoData['movie'], queryData: QueryState) {
+  function buildDocumentTitle(movie: MovieInfoData, queryData: QueryState) {
     const title = [movie.name]
     if (queryData.season) title.push(`Сезон ${queryData.season}`)
     if (queryData.episode) title.push(`Серия ${queryData.episode}`)
@@ -102,7 +84,7 @@ function MovieInfo({ id }: MovieInfoProps) {
   }
 
   useEffect(() => {
-    if (data?.movie) buildDocumentTitle(data.movie, query)
+    if (data) buildDocumentTitle(data, query)
   }, [data, query])
 
   useEffect(() => {
@@ -141,7 +123,7 @@ function MovieInfo({ id }: MovieInfoProps) {
   }
   if (error) return `Error! ${error}`
 
-  const movieInfo = data?.movie
+  const movieInfo = data
   if (!movieInfo) return null
 
   return (
