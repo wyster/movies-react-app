@@ -6,7 +6,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 module.exports = (env, argv) => {
   const isProduction = argv.mode === 'production';
   return {
-    entry: "./src/index.js",
+    entry: "./src/index.tsx",
     output: {
       path: path.resolve(__dirname, "build"),
       publicPath: '/',
@@ -60,7 +60,14 @@ module.exports = (env, argv) => {
             MiniCssExtractPlugin.loader,
             "css-loader",
             "postcss-loader",
-            "sass-loader",
+            {
+              loader: "sass-loader",
+              options: {
+                sassOptions: {
+                  quietDeps: true,
+                },
+              },
+            },
           ],
         },
       ],
