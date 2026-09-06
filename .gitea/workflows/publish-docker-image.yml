@@ -61,7 +61,6 @@ jobs:
     needs: build
     if: gitea.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
-    options: --network=gitea_internal
     timeout-minutes: 10
 
     steps:
