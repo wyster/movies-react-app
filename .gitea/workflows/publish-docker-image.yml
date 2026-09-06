@@ -84,7 +84,7 @@ jobs:
         with:
           # The registry is reachable from the runner host, but not from the
           # default bridge network used by the docker-container builder.
-          driver-opts: network=proxy
+          driver-opts: network=gitea_internal
 
       - name: Log in to Gitea Container Registry
         uses: docker/login-action@v3
