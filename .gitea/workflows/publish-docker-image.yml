@@ -45,9 +45,10 @@ jobs:
           CI: true
 
       - name: Build frontend
-        run: yarn build
+        run: npx webpack build --mode=development
         env:
           CI: true
+          NODE_ENV: production
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
