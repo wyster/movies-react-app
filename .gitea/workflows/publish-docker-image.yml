@@ -101,16 +101,15 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-buildx-
 
-      - name: Build ARM64 image
-        run: |
-          docker buildx build \
-            --target=runtime \
-            --platform linux/arm64 \
-            --cache-from type=local,src=/tmp/.buildx-cache \
-            --cache-to type=local,mode=max,dest=/tmp/.buildx-cache \
-            -t ${{ secrets.REGISTRY_HOST }}/${{ gitea.repository }}:latest \
-            --push \
-            .
+      - name: Publish tagged image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          platforms: linux/arm64
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,mode=max,dest=/tmp/.buildx-cache
+          tags: ${{ secrets.REGISTRY_HOST }}/${{ gitea.repository }}:latest
 
   publish_tag:
     name: Publish tagged image
