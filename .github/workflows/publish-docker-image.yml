@@ -170,6 +170,7 @@ jobs:
         uses: docker/build-push-action@v7
         with:
           push: true
+          target: build
           tags: ${{ secrets.DOCKERHUB_REPOSITORY }}:movies-react-app-${{ needs.prepare_publish.outputs.tag }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
