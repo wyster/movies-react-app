@@ -39,15 +39,17 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
 
-      - name: Install packages
-        run: npx update-browserslist-db@latest && yarn install --immutable
-        env:
-          CI: true
-
+#      - name: Install packages
+#        run: npx update-browserslist-db@latest && yarn install --immutable
+#        env:
+#          CI: true
+#
+#      - name: Build frontend
+#        run: yarn build
+#        env:
+#          CI: true
       - name: Build frontend
-        run: yarn build
-        env:
-          CI: true
+        run: mkdir build
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
@@ -71,11 +73,6 @@ jobs:
         with:
           name: build
           path: build
-
-      - name: Set up Docker
-        uses: docker/setup-docker-action@v4
-        with:
-          rootless: true
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -117,8 +114,6 @@ jobs:
 
       - name: Set up Docker
         uses: docker/setup-docker-action@v4
-        with:
-          rootless: true
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
