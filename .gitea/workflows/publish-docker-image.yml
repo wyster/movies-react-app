@@ -66,7 +66,7 @@ jobs:
             --platform linux/arm64 \
             --cache-from type=local,src=/tmp/.buildx-cache \
             --cache-to type=local,mode=max,dest=/tmp/.buildx-cache \
-            -t ${{ env.REGISTRY_HOST }}/${{ gitea.repository }}:movies-app-latest \
+            -t ${{ secrets.REGISTRY_HOST }}/${{ gitea.repository }}:movies-app-latest \
             --push \
             .
 
