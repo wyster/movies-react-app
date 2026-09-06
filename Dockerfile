@@ -1,16 +1,18 @@
 ARG NODE_VERSION=24
 FROM node:${NODE_VERSION}-slim
 
-ARG APP_API_URL
-ENV REACT_APP_API_URL=${APP_API_URL}
 ENV NODE_ENV=production
 
-COPY . /app
 WORKDIR /app
 
-RUN corepack enable
-RUN yarn install
+COPY package.json yarn.lock .yarnrc.yml ./
+COPY .yarn .yarn
 
-CMD ["yarn", "start"]
+RUN corepack enable
+RUN yarn install --immutable
+
+COPY . .
 
 EXPOSE 80
+
+CMD ["yarn", "start"]
