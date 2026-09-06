@@ -6,4 +6,4 @@ services:
   node:
     build:
       context: .
-      target: build
+      target: node

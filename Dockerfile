@@ -1,5 +1,5 @@
 ARG NODE_VERSION=24
-FROM node:${NODE_VERSION}-slim AS build
+FROM node:${NODE_VERSION}-slim AS node
 
 ARG APP_API_URL
 ENV REACT_APP_API_URL=${APP_API_URL}
@@ -12,7 +12,7 @@ RUN yarn install
 
 FROM nginx:alpine AS runtime
 
-COPY /app/build /usr/share/nginx/html
+COPY ./build /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
