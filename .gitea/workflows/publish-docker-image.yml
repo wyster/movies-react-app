@@ -102,7 +102,7 @@ jobs:
             --platform linux/arm64 \
             --cache-from type=local,src=/tmp/.buildx-cache \
             --cache-to type=local,mode=max,dest=/tmp/.buildx-cache \
-            -t gitea:3000/${{ github.repository }}:latest \
+            -t ${{ secrets.REGISTRY_HOST }}/${{ github.repository }}:latest \
             --push \
             .
 
