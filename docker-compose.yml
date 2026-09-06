@@ -1,3 +1,9 @@
 services:
   app:
-    build: .
+    build:
+      context: .
+      target: runtime
+  node:
+    build:
+      context: .
+      target: build
