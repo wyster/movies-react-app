@@ -82,7 +82,7 @@ jobs:
       - name: Log in to Gitea Container Registry
         uses: docker/login-action@v3
         with:
-          registry: ${{ secrets.REGISTRY_HOST }}
+          registry: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.TOKEN }}
 
