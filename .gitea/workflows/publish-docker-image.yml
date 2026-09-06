@@ -63,7 +63,7 @@ jobs:
       - name: Build ARM64 image
         run: |
           docker buildx build \
-            --target=build \
+            --target=runtime \
             --platform linux/arm64 \
             --cache-from type=local,src=/tmp/.buildx-cache \
             --cache-to type=local,mode=max,dest=/tmp/.buildx-cache \
