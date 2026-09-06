@@ -1,18 +1,9 @@
-ARG NODE_VERSION=24
-FROM node:${NODE_VERSION}-slim
-
-ENV NODE_ENV=production
+FROM nginx:alpine
 
 WORKDIR /app
-
-COPY package.json yarn.lock .yarnrc.yml ./
-COPY .yarn .yarn
-
-RUN corepack enable
-RUN yarn install --immutable
-
-COPY . .
+COPY /build /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
 
-CMD ["yarn", "start"]
+CMD ["nginx", "-g", "daemon off;"]

@@ -74,6 +74,8 @@ jobs:
 
       - name: Set up Docker
         uses: docker/setup-docker-action@v4
+        with:
+          rootless: true
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -115,6 +117,8 @@ jobs:
 
       - name: Set up Docker
         uses: docker/setup-docker-action@v4
+        with:
+          rootless: true
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
