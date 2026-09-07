@@ -6,7 +6,7 @@ on:
 jobs:
   build:
     name: Build frontend
-    runs-on: ubuntu-latest
+    runs-on: node-current
     timeout-minutes: 10
 
     steps:
