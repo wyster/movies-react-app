@@ -102,7 +102,12 @@ jobs:
         with:
           registry: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
-          password: test
+          password: ${{ secrets.TOKEN }}
+
+      - name: Fix Docker credentials registry
+        run: |
+          sed -i "s#${{ secrets.HOST }}#${{ secrets.REGISTRY_HOST }}#g" \
+            "${DOCKER_CONFIG:-$HOME/.docker}/config.json"
 
       - name: Publish tagged image
         uses: docker/build-push-action@v7
