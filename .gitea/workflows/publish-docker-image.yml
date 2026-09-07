@@ -98,7 +98,7 @@ jobs:
       - name: Login to Gitea Registry
         run: |
           docker run --rm \
-            --network gite_internal \
+            --network gitea_internal \
             -v /var/run/docker.sock:/var/run/docker.sock \
             -e REGISTRY_HOST="${{ secrets.REGISTRY_HOST }}" \
             -e REGISTRY_USERNAME="${{ secrets.USERNAME }}" \
