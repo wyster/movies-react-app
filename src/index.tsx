@@ -19,8 +19,6 @@ if (window.SENTRY_DSN) {
     replaysSessionSampleRate: 0.1,
     replaysOnErrorSampleRate: 1.0,
   })
-
-  Sentry.captureMessage('test')
 }
 
 if (!window.REACT_APP_API_URL) {
