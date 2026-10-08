@@ -9,6 +9,7 @@ import Player from './Video/Player'
 interface Translator {
   id: number
   title: string
+  isDirector: boolean
 }
 
 interface Video {
@@ -23,11 +24,12 @@ interface PlayerData {
 interface FilmProps {
   filmId: number
   translators: Translator[]
-  onUpdateState: (values: Record<string, number | string>) => void
+  onUpdateState: (values: Record<string, number | string | boolean>) => void
   playerTime?: number
   playerVolume?: number
   translatorId?: number | null
   quality?: string | null
+  director?: boolean | null
 }
 
 function Film({
@@ -38,15 +40,21 @@ function Film({
   playerVolume = 100,
   translatorId: propTranslatorId,
   quality: propQuality,
+  director: propDirector,
 }: FilmProps) {
   const [translatorId, setTranslatorId] = useState<number | null>(null)
+  const [director, setDirector] = useState<boolean | null>(null)
   const [videos, setVideos] = useState<Video[]>([])
   const [quality, setQuality] = useState<string | null>(null)
-  const { data: playerData } = useQuery<PlayerData>({ queryKey: ['player', filmId, translatorId], queryFn: () => getPlayer(filmId, translatorId as number), enabled: translatorId !== null })
+  const { data: playerData } = useQuery<PlayerData>({ queryKey: ['player', filmId, translatorId, director], queryFn: () => getPlayer(filmId, translatorId, director), enabled: translatorId !== null })
 
   useEffect(() => {
     setTranslatorId(propTranslatorId ?? null)
   }, [propTranslatorId])
+
+  useEffect(() => {
+    setDirector(propDirector ?? null)
+  }, [propDirector])
 
   useEffect(() => {
     setQuality(propQuality ?? null)
@@ -61,9 +69,10 @@ function Film({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filmId, translatorId])
 
-  function onClickOnTranslator(id: number) {
-    setTranslatorId(id)
-    onUpdateState({ translator: id })
+  function onClickOnTranslator(translator: Translator) {
+    setTranslatorId(translator.id)
+    setDirector(translator.isDirector);
+    onUpdateState({ translator: translator.id, director: translator.isDirector })
   }
 
   function onClickOnQuality(value: string) {
