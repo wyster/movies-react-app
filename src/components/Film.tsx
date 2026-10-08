@@ -72,7 +72,7 @@ function Film({
   function onClickOnTranslator(translator: Translator) {
     setTranslatorId(translator.id)
     setDirector(translator.isDirector);
-    onUpdateState({ translator: translator.id, director: translator.isDirector })
+    onUpdateState({ translator: translator.id, director: translator.isDirector ? 1 : 0 })
   }
 
   function onClickOnQuality(value: string) {
