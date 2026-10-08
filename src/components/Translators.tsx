@@ -1,12 +1,13 @@
 interface Translator {
   id: number
   title: string
+  isDirector: boolean
 }
 
 interface TranslatorsProps {
   translators: Translator[]
   translatorId: number | null | undefined
-  onClickOnTranslator: (translatorId: number) => void
+  onClickOnTranslator: (translatorId: Translator) => void
 }
 
 function Translators({
@@ -25,7 +26,7 @@ function Translators({
               className={`btn btn-link nav-link ${translatorId === translator.id ? 'active' : ''}`}
               onClick={(event) => {
                 event.preventDefault()
-                onClickOnTranslator(translator.id)
+                onClickOnTranslator(translator)
               }}
             >
               {translator.title}

@@ -9,6 +9,7 @@ import * as yup from 'yup'
 interface Translator {
   id: number
   title: string
+  isDirector: boolean
 }
 
 interface MovieInfoData {
@@ -28,7 +29,8 @@ interface QueryState {
   quality: string | null
   time: number
   volume: number
-  autoPlay: boolean
+  autoPlay: boolean,
+  director: boolean
 }
 
 type StateUpdate = Partial<QueryState>
@@ -51,6 +53,7 @@ const defaultQuery: QueryState = {
   time: 0,
   volume: 100,
   autoPlay: false,
+  director: false
 }
 
 interface MovieInfoProps {
@@ -152,6 +155,7 @@ function MovieInfo({ id }: MovieInfoProps) {
           onUpdateState={onUpdateState}
           playerTime={query.time}
           playerVolume={query.volume}
+          director={query.director}
         />
       )}
       <ul>

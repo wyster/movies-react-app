@@ -6,6 +6,12 @@ type Process = {
     }
 }
 
+interface Translator {
+    id: number
+    title: string
+    isDirector: boolean
+}
+
 const runtime = globalThis as typeof globalThis & { process?: Process }
 const apiUrl = typeof window !== 'undefined'
     ? window.REACT_APP_API_URL
@@ -15,10 +21,11 @@ export const api = axios.create({baseURL: `${apiUrl}/`})
 export const getMovieDetails = (id: number) => api.get('details', {params: {id}}).then(r => r.data)
 export const getSearch = (q: string) => api.get('search', {params: {q}}).then(r => r.data)
 export const getMovieId = (url: string) => api.get('id-from-url', {params: {url}}).then(r => r.data)
-export const getPlayer = (filmId: number, translatorId: number) => api.get('movie/player', {
+export const getPlayer = (filmId: number, translator: number|null, director: boolean|null) => api.get('movie/player', {
     params: {
         id: filmId,
-        translator_id: translatorId
+        translator_id: translator,
+        director: director ? 1 : 0
     }
 }).then(r => r.data)
 export const getSerialData = (serialId: number, translatorId: number) => api.get('serial/episodes', {
