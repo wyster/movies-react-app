@@ -17,7 +17,7 @@
   "scripts": {
     "start": "node ./bin/start.js",
     "start:dev": "npx webpack build --mode=development --progress --watch",
-    "build": "npx webpack build --progress --mode=production",
+    "build": "NODE_ENV=production npx webpack build --progress --mode=production",
     "build:ssr": "webpack -c ssr/webpack.config.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
