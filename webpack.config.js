@@ -12,6 +12,8 @@ module.exports = (env, argv) => {
     output: {
       path: path.resolve(__dirname, "build"),
       publicPath: '/',
+      filename: isProduction ? '[name].[contenthash:8].js' : '[name].js',
+      chunkFilename: isProduction ? '[name].[contenthash:8].chunk.js' : '[name].chunk.js',
     },
     resolve: {
       extensions: ['.js', '.jsx', '.ts', '.tsx'],
@@ -86,7 +88,10 @@ module.exports = (env, argv) => {
           }
         ],
       }),
-      new MiniCssExtractPlugin()
+      new MiniCssExtractPlugin({
+        filename: isProduction ? '[name].[contenthash:8].css' : '[name].css',
+        chunkFilename: isProduction ? '[name].[contenthash:8].chunk.css' : '[name].chunk.css',
+      })
     ],
     devServer: {
       historyApiFallback: true,
