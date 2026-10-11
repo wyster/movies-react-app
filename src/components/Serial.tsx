@@ -7,6 +7,11 @@ import Episodes from './Serial/Episodes'
 import QualityChoices from './Video/QualityChoices'
 import Player from './Video/Player'
 
+interface Translator {
+  id: number
+  title: string
+  isDirector: boolean
+}
 
 interface Episode {
   episode: number
@@ -100,11 +105,11 @@ function Serial({
     if (translatorId === null || seasonId === null || episodeId === null) setVideos([])
   }, [serialId, translatorId, seasonId, episodeId])
 
-  const onClickOnTranslator = (id: number) => {
+  const onClickOnTranslator = (translator: Translator) => {
     setSeasonId(null);
     setEpisodeId(null);
-    setTranslatorId(id);
-    onUpdateState({translator: id})
+    setTranslatorId(translator.id);
+    onUpdateState({translator: translator.id})
   }
   const onClickOnSeason = (id: number) => {
     setSeasonId(id);

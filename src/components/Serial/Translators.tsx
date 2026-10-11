@@ -5,13 +5,14 @@ import { default as List} from '../Translators'
 
 interface Translator {
   id: number
-  title: string
+  title: string,
+  isDirector: boolean
 }
 
 interface TranslatorsProps {
   serialId: number
   translatorId: number
-  onClickOnTranslator: (translatorId: number) => void
+  onClickOnTranslator: (translator: Translator) => void
 }
 
 function Translators({

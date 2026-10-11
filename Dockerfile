@@ -10,6 +10,7 @@ WORKDIR /app
 
 RUN corepack enable && corepack install
 RUN yarn install --immutable
+RUN yarn typecheck
 RUN yarn build
 
 FROM nginx:alpine AS runtime
