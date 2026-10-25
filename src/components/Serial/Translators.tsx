@@ -7,6 +7,7 @@ interface Translator {
   id: number
   title: string,
   isDirector: boolean
+  lang?: string
 }
 
 interface TranslatorsProps {

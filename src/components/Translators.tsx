@@ -2,6 +2,7 @@ interface Translator {
   id: number
   title: string
   isDirector: boolean
+  lang?: string
 }
 
 interface TranslatorsProps {
@@ -15,11 +16,18 @@ function Translators({
   translatorId,
   onClickOnTranslator,
 }: TranslatorsProps) {
+  const ukrainianTranslators = translators.filter(translator => translator.lang === 'uk')
+  const visibleTranslators = ukrainianTranslators.length > 0
+    ? ukrainianTranslators
+    : translators.length === 1
+      ? translators
+      : []
+
   return (
     <>
-      {translators.length > 0 && (
+      {visibleTranslators.length > 0 && (
         <nav className="nav nav-pills">
-          {translators.map(translator => (
+          {visibleTranslators.map(translator => (
             <button
               type="button"
               key={translator.id}
