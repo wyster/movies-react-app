@@ -36,3 +36,6 @@ publish-docker-image: ## Build and publish the Docker image
 		--push \
 		--tag "$(REGISTRY_HOST)/$(REGISTRY_REPOSITORY):latest" \
 		.
+
+serve:
+	$(DOCKER_COMPOSE) run --rm -p 8080:8080 node yarn serve

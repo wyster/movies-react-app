@@ -43,6 +43,7 @@ const querySchema = yup.object({
   time: yup.number().nullable(),
   volume: yup.number().nullable(),
   autoPlay: yup.bool().nullable(),
+  director: yup.bool().nullable(),
 })
 
 const defaultQuery: QueryState = {
@@ -99,6 +100,7 @@ function MovieInfo({ id }: MovieInfoProps) {
       time: castQuery.time ?? current.time,
       volume: castQuery.volume ?? current.volume,
       autoPlay: castQuery.autoPlay ?? current.autoPlay,
+      director: castQuery.director ?? current.director,
     }))
 
     const onPopState = (event: PopStateEvent) => {
@@ -110,6 +112,7 @@ function MovieInfo({ id }: MovieInfoProps) {
         time: castState.time ?? defaultQuery.time,
         volume: castState.volume ?? defaultQuery.volume,
         autoPlay: castState.autoPlay ?? defaultQuery.autoPlay,
+        director: castState.director ?? defaultQuery.director,
       })
     }
     window.addEventListener('popstate', onPopState)
