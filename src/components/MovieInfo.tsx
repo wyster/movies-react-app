@@ -164,7 +164,7 @@ function MovieInfo({ id }: MovieInfoProps) {
       <ul>
         <li><b>Movie ID:</b> {id}</li>
         {Object.entries(movieInfo).map(([label, value]) => (
-          <li key={label}>
+          <li key={label} className="text-break">
             <b style={{ marginRight: 10 }}>{label}:</b>
             {Array.isArray(value) && JSON.stringify(value)}
             {typeof value === 'string' && value}
