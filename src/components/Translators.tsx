@@ -1,9 +1,4 @@
-interface Translator {
-  id: number
-  title: string
-  isDirector: boolean
-  lang?: string
-}
+import { getVisibleTranslators, type Translator } from '../utils/TranslatorUtils'
 
 interface TranslatorsProps {
   translators: Translator[]
@@ -16,12 +11,7 @@ function Translators({
   translatorId,
   onClickOnTranslator,
 }: TranslatorsProps) {
-  const ukrainianTranslators = translators.filter(translator => translator.lang === 'uk')
-  const visibleTranslators = ukrainianTranslators.length > 0
-    ? ukrainianTranslators
-    : translators.length === 1
-      ? translators
-      : []
+  const visibleTranslators = getVisibleTranslators(translators)
 
   return (
     <>

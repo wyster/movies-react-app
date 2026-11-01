@@ -31,6 +31,7 @@ interface FilmProps {
   filmId: number
   translators: Translator[]
   onUpdateState: (values: Record<string, number | string | boolean>) => void
+  onQualitiesChange: (qualities: string[]) => void
   playerTime?: number
   playerVolume?: number
   translatorId?: number | null
@@ -42,6 +43,7 @@ function Film({
   filmId,
   translators,
   onUpdateState,
+  onQualitiesChange,
   playerTime = 0,
   playerVolume = 100,
   translatorId: propTranslatorId,
@@ -70,6 +72,10 @@ function Film({
   useEffect(() => {
     if (playerData) setVideos(playerData.streams)
   }, [playerData])
+
+  useEffect(() => {
+    onQualitiesChange(videos.map(video => video.quality))
+  }, [videos, onQualitiesChange])
 
   useEffect(() => {
     if (translatorId === null) setVideos([])

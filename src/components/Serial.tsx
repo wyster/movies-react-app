@@ -45,6 +45,7 @@ interface SerialProps {
   translatorId?: number | null
   quality?: string | null
   onUpdateState: (values: Record<string, number | string>) => void
+  onQualitiesChange: (qualities: string[]) => void
   playerTime?: number
   playerVolume?: number
   playerAutoPlay?: boolean
@@ -57,6 +58,7 @@ function Serial({
   translatorId: propTranslatorId,
   quality: propQuality,
   onUpdateState,
+  onQualitiesChange,
   playerTime = 0,
   playerVolume = 100,
   playerAutoPlay = false,
@@ -74,6 +76,10 @@ function Serial({
   useEffect(() => {
     if (playerData) setVideos(playerData.streams)
   }, [playerData])
+
+  useEffect(() => {
+    onQualitiesChange(videos.map(video => video.quality))
+  }, [videos, onQualitiesChange])
   useEffect(() => {
     setTranslatorId(propTranslatorId ?? null)
   }, [propTranslatorId])

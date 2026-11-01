@@ -4,13 +4,8 @@ import { getMovieDetails } from '../api'
 import Serial from './Serial'
 import Film from './Film'
 import * as yup from 'yup'
+import { getVisibleTranslators, type Translator } from '../utils/TranslatorUtils'
 
-
-interface Translator {
-  id: number
-  title: string
-  isDirector: boolean
-}
 
 interface MovieInfoData {
   isSerial: boolean
@@ -64,6 +59,7 @@ interface MovieInfoProps {
 function MovieInfo({ id }: MovieInfoProps) {
   const { isLoading: loading, error, data } = useQuery<MovieInfoData>({ queryKey: ['movie-details', id], queryFn: () => getMovieDetails(id), enabled: Boolean(id) })
   const [query, setQuery] = useState<QueryState>(defaultQuery)
+  const [availableQualities, setAvailableQualities] = useState<string[]>([])
 
   const onUpdateState = useCallback((values: StateUpdate) => {
     setQuery(current => ({ ...defaultQuery, ...current, ...values }))
@@ -72,13 +68,20 @@ function MovieInfo({ id }: MovieInfoProps) {
     Object.entries(values).forEach(([name, value]) => {
       searchParams.set(name, String(value))
     })
-    const newQuery = `?${searchParams.toString()}`
+    Object.entries(values).forEach(([name, value]) => {
+      if (value === null) searchParams.delete(name)
+    })
+    const newQuery = searchParams.size ? `?${searchParams.toString()}` : ''
     if (window.location.search === newQuery) return
 
     const historyData = { ...window.history.state, ...values }
     window.history.pushState(historyData, document.title, newQuery)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query])
+
+  const onQualitiesChange = useCallback((qualities: string[]) => {
+    setAvailableQualities(qualities)
+  }, [])
 
   function buildDocumentTitle(movie: MovieInfoData, queryData: QueryState) {
     const title = [movie.name]
@@ -90,6 +93,13 @@ function MovieInfo({ id }: MovieInfoProps) {
   useEffect(() => {
     if (data) buildDocumentTitle(data, query)
   }, [data, query])
+
+  useEffect(() => {
+    if (query.quality != null || availableQualities.length === 0) return
+    const rank = (quality: string) => Number(quality.match(/\d+/)?.[0] ?? 0)
+    const bestQuality = availableQualities.reduce((best, quality) => rank(quality) > rank(best) ? quality : best)
+    onUpdateState({ quality: bestQuality })
+  }, [availableQualities, onUpdateState, query.quality])
 
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search)
@@ -119,6 +129,15 @@ function MovieInfo({ id }: MovieInfoProps) {
     return () => window.removeEventListener('popstate', onPopState)
   }, [])
 
+  const visibleTranslators = getVisibleTranslators(data?.translators ?? [])
+  const soleTranslator = visibleTranslators.length === 1 ? visibleTranslators[0] : null
+
+  useEffect(() => {
+    if (data && query.translator == null && soleTranslator) {
+      onUpdateState({ translator: soleTranslator.id, director: soleTranslator.isDirector })
+    }
+  }, [data, query.translator, soleTranslator?.id, soleTranslator?.isDirector, onUpdateState])
+
   if (!id) return <p>No ID</p>
   if (loading) {
     return (
@@ -132,6 +151,8 @@ function MovieInfo({ id }: MovieInfoProps) {
   const movieInfo = data
   if (!movieInfo) return null
 
+  const selectedTranslator = query.translator ?? soleTranslator?.id ?? null
+
   return (
     <>
       <h4>
@@ -140,11 +161,12 @@ function MovieInfo({ id }: MovieInfoProps) {
       {movieInfo.isSerial ? (
         <Serial
           serialId={id}
-          translatorId={query.translator}
+          translatorId={selectedTranslator}
           episodeId={query.episode}
           seasonId={query.season}
           quality={query.quality}
           onUpdateState={onUpdateState}
+          onQualitiesChange={onQualitiesChange}
           playerTime={query.time}
           playerVolume={query.volume}
           playerAutoPlay={query.autoPlay}
@@ -152,10 +174,11 @@ function MovieInfo({ id }: MovieInfoProps) {
       ) : (
         <Film
           filmId={id}
-          translatorId={query.translator}
+          translatorId={selectedTranslator}
           translators={movieInfo.translators}
           quality={query.quality}
           onUpdateState={onUpdateState}
+          onQualitiesChange={onQualitiesChange}
           playerTime={query.time}
           playerVolume={query.volume}
           director={query.director}
