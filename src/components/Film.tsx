@@ -17,8 +17,14 @@ interface Video {
   playlist: string
 }
 
+interface Subtitle {
+  lang: string
+  url: string
+}
+
 interface PlayerData {
   streams: Video[]
+  subtitles: Subtitle[]
 }
 
 interface FilmProps {
@@ -46,6 +52,7 @@ function Film({
   const [director, setDirector] = useState<boolean | null>(null)
   const [videos, setVideos] = useState<Video[]>([])
   const [quality, setQuality] = useState<string | null>(null)
+  const [subtitleUrl, setSubtitleUrl] = useState<string | null>(null)
   const { data: playerData } = useQuery<PlayerData>({ queryKey: ['player', filmId, translatorId, director], queryFn: () => getPlayer(filmId, translatorId, director), enabled: translatorId !== null })
 
   useEffect(() => {
@@ -110,6 +117,7 @@ function Film({
                 <Player
                   movieId={filmId}
                   src={getVideoSrc(quality)}
+                  subtitles={playerData?.subtitles}
                   currentTime={playerTime as unknown as null | undefined}
                   volume={playerVolume as unknown as null | undefined}
                   onCurrentTimeChange={onCurrentTimeChange as () => void}

@@ -13,9 +13,15 @@ interface MovieData {
   year: number
 }
 
+interface Subtitle {
+  lang: string
+  url: string
+}
+
 interface PlayerProps {
   movieId: number
   src?: string
+  subtitles?: Subtitle[]
   currentTime?: number | null
   volume?: number | null
   onCurrentTimeChange?: (time: number) => void
@@ -29,6 +35,7 @@ interface PlayerProps {
 function Player({
   movieId,
   src,
+  subtitles = [],
   currentTime = null,
   volume = null,
   onCurrentTimeChange = () => {},
@@ -57,6 +64,9 @@ function Player({
         <VideoPlayer>
           <VideoSkin>
             <Video src={src} playsInline autoPlay={autoPlay} poster={movieData?.poster}>
+              {subtitles.map((subtitle) => (
+                <track key={`${subtitle.lang}-${subtitle.url}`} kind="subtitles" src={subtitle.url} srcLang={subtitle.lang} label={subtitle.lang}  />
+              ))}
               <GoogleCast />
               <CastButton
                 render={(props, state) => (
