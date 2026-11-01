@@ -7,9 +7,11 @@ import { VideoSkin, Video, VideoPlayer } from '@videojs/react/video'
 
 
 interface MovieData {
+  isSerial: boolean
   name: string
   description: string
   poster: string
+  year: number
 }
 
 interface PlayerProps {
@@ -21,6 +23,8 @@ interface PlayerProps {
   onChangeVolume?: (volume: number) => void
   onEnded?: () => void
   autoPlay?: boolean
+  season?: number | null
+  episode?: number | null
 }
 
 function Player({
@@ -32,12 +36,26 @@ function Player({
   onChangeVolume = () => {},
   onEnded = () => {},
   autoPlay = false,
+  season = null,
+  episode = null,
 }: PlayerProps) {
   const videoElement = useRef<HTMLElement | null>(null)
   const videoContainer = useRef<HTMLDivElement | null>(null)
   const [timer, setTimer] = useState<number | null>(null)
   const { cast: myCastJs, myCast, setCast } = useCast() as any
   const { data: movieData } = useQuery<MovieData>({ queryKey: ['movie-details', movieId], queryFn: () => getMovieDetails(movieId) })
+  const castTitle = (() => {
+    if (!movieData) return undefined
+
+    if (!movieData.isSerial) {
+      return `${movieData.name} (${movieData.year})`
+    }
+
+    const seasonTitle = season !== null ? ` — Season ${season}` : ''
+    const episodeTitle = episode !== null ? `, Episode ${episode}` : ''
+
+    return `${movieData.name} (${movieData.year})${seasonTitle}${episodeTitle}`
+  })()
 
   function cast() {
     if (myCast.connected) {
@@ -48,7 +66,7 @@ function Player({
       if (currentTime) myCastJs.seek(currentTime)
       myCastJs.cast(src, {
         poster: movieData?.poster,
-        title: movieData?.name,
+        title: castTitle,
         description: movieData?.description,
       })
       return
@@ -73,7 +91,7 @@ function Player({
       castInstance.time = currentTime
       castInstance.cast(src, {
         poster: movieData?.poster,
-        title: movieData?.name,
+        title: castTitle,
         description: movieData?.description,
       })
     })

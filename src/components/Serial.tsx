@@ -160,6 +160,8 @@ function Serial({
             <div className="mt-1">
               <Player
                   movieId={serialId}
+                  season={seasonId}
+                  episode={episodeId}
                   src={getVideoSrc(quality)}
                   currentTime={playerTime as unknown as null | undefined}
                   volume={playerVolume as unknown as null | undefined}
