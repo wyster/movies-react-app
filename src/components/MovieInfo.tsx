@@ -156,7 +156,7 @@ function MovieInfo({ id }: MovieInfoProps) {
   return (
     <>
       <h4>
-        {movieInfo.originalName || movieInfo.name} ({movieInfo.year})
+        {movieInfo.name || movieInfo.originalName} ({movieInfo.year})
       </h4>
       {movieInfo.isSerial ? (
         <Serial
