@@ -3240,6 +3240,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@videojs/google-cast@npm:^10.2.0":
+  version: 10.2.0
+  resolution: "@videojs/google-cast@npm:10.2.0"
+  dependencies:
+    "@videojs/core": "npm:10.2.0"
+    "@videojs/media": "npm:10.2.0"
+    "@videojs/utils": "npm:10.2.0"
+  checksum: 10c0/bf9c43a4a07b400ba1ffc0c304dcd10f6e23a15554a908a548cd095a3c61ec75d054262f110197b72803ac04e6d84862f1d448d75cdae6a5f97b8440c0013811
+  languageName: node
+  linkType: hard
+
 "@videojs/media@npm:10.2.0":
   version: 10.2.0
   resolution: "@videojs/media@npm:10.2.0"
@@ -7374,6 +7385,7 @@ __metadata:
     "@types/react": "npm:^19.2.18"
     "@types/react-dom": "npm:^19.2.7"
     "@types/videojs": "npm:^5.16.2"
+    "@videojs/google-cast": "npm:^10.2.0"
     "@videojs/react": "npm:^10.2.0"
     astroturf: "npm:^1.2.0"
     autoprefixer: "npm:^10.5.4"
